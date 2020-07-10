@@ -1,5 +1,18 @@
 # slack-web-api-sdk-php
 
+## composer
+```json
+"require": {
+    "comi/slack-web-api-sdk-php": "dev-master"
+},
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "git@github.com:comicat-hu/slack-web-api-sdk-php.git"
+    }
+]
+```
+
 ## example
 
 ```php

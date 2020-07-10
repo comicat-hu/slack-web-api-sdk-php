@@ -1,0 +1,11 @@
+{
+    "name": "comi/slack-web-api-sdk-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "comicat-hu",
+            "email": "senline39518@gmail.com"
+        }
+    ],
+    "require": {}
+}

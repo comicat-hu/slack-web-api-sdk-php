@@ -7,5 +7,16 @@
             "email": "senline39518@gmail.com"
         }
     ],
-    "require": {}
+    "description": "slack web api sdk",
+    "require": {},
+    "extra": {
+        "symfony": {
+            "allow-contrib": "true"
+        }
+    },
+    "require-dev": {
+        "jane-php/open-api-2": "^6.0",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "symfony/flex": "^1.8"
+    }
 }

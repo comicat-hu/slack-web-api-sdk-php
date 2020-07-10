@@ -27,5 +27,11 @@
         "jane-php/open-api-2": "^6.0",
         "friendsofphp/php-cs-fixer": "^2.16",
         "symfony/flex": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Comicat\\Slack\\Api\\": "generated/",
+            "Comicat\\Slack\\": "src/"
+        }
     }
 }

@@ -2,15 +2,15 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AdminTeamsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AdminTeamsCreate extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Create an Enterprise team.
      *
      * @param array $formParameters {
      *     @var string $team_domain Team domain (for example, slacksoftballteam).
-     *     @var string $team_description Description for the team.
      *     @var string $team_name Team name (for example, Slack Softball Team).
+     *     @var string $team_description Description for the team.
      *     @var string $team_discoverability Who can join the team. A team's discoverability can be `open`, `closed`, `invite_only`, or `unlisted`.
      * }
      * @param array $headerParameters {
@@ -22,7 +22,7 @@ class AdminTeamsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -42,12 +42,12 @@ class AdminTeamsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('team_domain', 'team_description', 'team_name', 'team_discoverability'));
+        $optionsResolver->setDefined(array('team_domain', 'team_name', 'team_description', 'team_discoverability'));
         $optionsResolver->setRequired(array('team_domain', 'team_name'));
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('team_domain', array('string'));
-        $optionsResolver->setAllowedTypes('team_description', array('string'));
         $optionsResolver->setAllowedTypes('team_name', array('string'));
+        $optionsResolver->setAllowedTypes('team_description', array('string'));
         $optionsResolver->setAllowedTypes('team_discoverability', array('string'));
         return $optionsResolver;
     }
@@ -66,7 +66,7 @@ class AdminTeamsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
      *
      * @return null|\Comicat\Slack\Api\Model\AdminTeamsCreatePostResponse200|\Comicat\Slack\Api\Model\AdminTeamsCreatePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AdminTeamsCreatePostResponse200', 'json');

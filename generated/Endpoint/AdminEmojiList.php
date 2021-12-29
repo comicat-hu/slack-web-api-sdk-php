@@ -2,14 +2,14 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AdminEmojiList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AdminEmojiList extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * List emoji for an Enterprise Grid organization.
      *
      * @param array $queryParameters {
-     *     @var string $cursor Set `cursor` to `next_cursor` returned by the previous call to list items in the next page
      *     @var string $token Authentication token. Requires scope: `admin.teams:read`
+     *     @var string $cursor Set `cursor` to `next_cursor` returned by the previous call to list items in the next page
      *     @var int $limit The maximum number of items to return. Must be between 1 - 1000 both inclusive.
      * }
      */
@@ -17,7 +17,7 @@ class AdminEmojiList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -37,11 +37,11 @@ class AdminEmojiList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('cursor', 'token', 'limit'));
+        $optionsResolver->setDefined(array('token', 'cursor', 'limit'));
         $optionsResolver->setRequired(array('token'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('cursor', array('string'));
         $optionsResolver->setAllowedTypes('token', array('string'));
+        $optionsResolver->setAllowedTypes('cursor', array('string'));
         $optionsResolver->setAllowedTypes('limit', array('int'));
         return $optionsResolver;
     }
@@ -51,7 +51,7 @@ class AdminEmojiList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements
      *
      * @return null|\Comicat\Slack\Api\Model\AdminEmojiListGetResponse200|\Comicat\Slack\Api\Model\AdminEmojiListGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AdminEmojiListGetResponse200', 'json');

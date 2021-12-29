@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class UsersLookupByEmailGetResponse200Normalizer implements DenormalizerInterfac
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\UsersLookupByEmailGetResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('ok', $data)) {
             $object->setOk($data['ok']);
             unset($data['ok']);
@@ -51,12 +54,8 @@ class UsersLookupByEmailGetResponse200Normalizer implements DenormalizerInterfac
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
-        if (null !== $object->getUser()) {
-            $data['user'] = $object->getUser();
-        }
+        $data['ok'] = $object->getOk();
+        $data['user'] = $object->getUser();
         foreach ($object as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $data[$key] = $value;

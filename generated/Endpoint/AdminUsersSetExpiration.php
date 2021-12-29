@@ -2,15 +2,15 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AdminUsersSetExpiration extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AdminUsersSetExpiration extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Set an expiration for a guest user
      *
      * @param array $formParameters {
-     *     @var int $expiration_ts Timestamp when guest account should be disabled.
-     *     @var string $user_id The ID of the user to set an expiration for.
      *     @var string $team_id The ID (`T1234`) of the workspace.
+     *     @var string $user_id The ID of the user to set an expiration for.
+     *     @var int $expiration_ts Timestamp when guest account should be disabled.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `admin.users:write`
@@ -21,7 +21,7 @@ class AdminUsersSetExpiration extends \Jane\OpenApiRuntime\Client\BaseEndpoint i
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -41,12 +41,12 @@ class AdminUsersSetExpiration extends \Jane\OpenApiRuntime\Client\BaseEndpoint i
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('expiration_ts', 'user_id', 'team_id'));
-        $optionsResolver->setRequired(array('expiration_ts', 'user_id', 'team_id'));
+        $optionsResolver->setDefined(array('team_id', 'user_id', 'expiration_ts'));
+        $optionsResolver->setRequired(array('team_id', 'user_id', 'expiration_ts'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('expiration_ts', array('int'));
-        $optionsResolver->setAllowedTypes('user_id', array('string'));
         $optionsResolver->setAllowedTypes('team_id', array('string'));
+        $optionsResolver->setAllowedTypes('user_id', array('string'));
+        $optionsResolver->setAllowedTypes('expiration_ts', array('int'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -64,7 +64,7 @@ class AdminUsersSetExpiration extends \Jane\OpenApiRuntime\Client\BaseEndpoint i
      *
      * @return null|\Comicat\Slack\Api\Model\AdminUsersSetExpirationPostResponse200|\Comicat\Slack\Api\Model\AdminUsersSetExpirationPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AdminUsersSetExpirationPostResponse200', 'json');

@@ -9,6 +9,12 @@ class UsersInfoGetResponsedefault
      *
      * @var string
      */
+    protected $callstack;
+    /**
+     * 
+     *
+     * @var string
+     */
     protected $error;
     /**
      * 
@@ -16,6 +22,27 @@ class UsersInfoGetResponsedefault
      * @var bool
      */
     protected $ok;
+    /**
+     * 
+     *
+     * @return string
+     */
+    public function getCallstack() : string
+    {
+        return $this->callstack;
+    }
+    /**
+     * 
+     *
+     * @param string $callstack
+     *
+     * @return self
+     */
+    public function setCallstack(string $callstack) : self
+    {
+        $this->callstack = $callstack;
+        return $this;
+    }
     /**
      * 
      *

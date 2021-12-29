@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsPagingNormalizer implements DenormalizerInterface, NormalizerInterface
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsPaging();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('count', $data)) {
             $object->setCount($data['count']);
         }
@@ -59,9 +62,7 @@ class ObjsPagingNormalizer implements DenormalizerInterface, NormalizerInterface
         if (null !== $object->getCount()) {
             $data['count'] = $object->getCount();
         }
-        if (null !== $object->getPage()) {
-            $data['page'] = $object->getPage();
-        }
+        $data['page'] = $object->getPage();
         if (null !== $object->getPages()) {
             $data['pages'] = $object->getPages();
         }
@@ -71,9 +72,7 @@ class ObjsPagingNormalizer implements DenormalizerInterface, NormalizerInterface
         if (null !== $object->getSpill()) {
             $data['spill'] = $object->getSpill();
         }
-        if (null !== $object->getTotal()) {
-            $data['total'] = $object->getTotal();
-        }
+        $data['total'] = $object->getTotal();
         return $data;
     }
 }

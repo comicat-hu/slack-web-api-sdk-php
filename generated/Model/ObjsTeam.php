@@ -43,7 +43,7 @@ class ObjsTeam
     /**
      * 
      *
-     * @var string
+     * @var mixed
      */
     protected $discoverable;
     /**
@@ -70,6 +70,12 @@ class ObjsTeam
      * @var string
      */
     protected $enterpriseName;
+    /**
+     * 
+     *
+     * @var ObjsExternalOrgMigrations
+     */
+    protected $externalOrgMigrations;
     /**
      * 
      *
@@ -103,9 +109,21 @@ class ObjsTeam
     /**
      * 
      *
+     * @var bool
+     */
+    protected $isOverStorageLimit;
+    /**
+     * 
+     *
      * @var int
      */
     protected $limitTs;
+    /**
+     * 
+     *
+     * @var string
+     */
+    protected $locale;
     /**
      * 
      *
@@ -141,7 +159,25 @@ class ObjsTeam
      *
      * @var string
      */
+    protected $payProdCur;
+    /**
+     * 
+     *
+     * @var string
+     */
     protected $plan;
+    /**
+     * 
+     *
+     * @var ObjsPrimaryOwner
+     */
+    protected $primaryOwner;
+    /**
+     * 
+     *
+     * @var ObjsTeamSsoProvider
+     */
+    protected $ssoProvider;
     /**
      * 
      *
@@ -271,20 +307,20 @@ class ObjsTeam
     /**
      * 
      *
-     * @return string
+     * @return mixed
      */
-    public function getDiscoverable() : string
+    public function getDiscoverable()
     {
         return $this->discoverable;
     }
     /**
      * 
      *
-     * @param string $discoverable
+     * @param mixed $discoverable
      *
      * @return self
      */
-    public function setDiscoverable(string $discoverable) : self
+    public function setDiscoverable($discoverable) : self
     {
         $this->discoverable = $discoverable;
         return $this;
@@ -371,6 +407,27 @@ class ObjsTeam
     public function setEnterpriseName(string $enterpriseName) : self
     {
         $this->enterpriseName = $enterpriseName;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return ObjsExternalOrgMigrations
+     */
+    public function getExternalOrgMigrations() : ObjsExternalOrgMigrations
+    {
+        return $this->externalOrgMigrations;
+    }
+    /**
+     * 
+     *
+     * @param ObjsExternalOrgMigrations $externalOrgMigrations
+     *
+     * @return self
+     */
+    public function setExternalOrgMigrations(ObjsExternalOrgMigrations $externalOrgMigrations) : self
+    {
+        $this->externalOrgMigrations = $externalOrgMigrations;
         return $this;
     }
     /**
@@ -481,6 +538,27 @@ class ObjsTeam
     /**
      * 
      *
+     * @return bool
+     */
+    public function getIsOverStorageLimit() : bool
+    {
+        return $this->isOverStorageLimit;
+    }
+    /**
+     * 
+     *
+     * @param bool $isOverStorageLimit
+     *
+     * @return self
+     */
+    public function setIsOverStorageLimit(bool $isOverStorageLimit) : self
+    {
+        $this->isOverStorageLimit = $isOverStorageLimit;
+        return $this;
+    }
+    /**
+     * 
+     *
      * @return int
      */
     public function getLimitTs() : int
@@ -497,6 +575,27 @@ class ObjsTeam
     public function setLimitTs(int $limitTs) : self
     {
         $this->limitTs = $limitTs;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string
+     */
+    public function getLocale() : string
+    {
+        return $this->locale;
+    }
+    /**
+     * 
+     *
+     * @param string $locale
+     *
+     * @return self
+     */
+    public function setLocale(string $locale) : self
+    {
+        $this->locale = $locale;
         return $this;
     }
     /**
@@ -609,6 +708,27 @@ class ObjsTeam
      *
      * @return string
      */
+    public function getPayProdCur() : string
+    {
+        return $this->payProdCur;
+    }
+    /**
+     * 
+     *
+     * @param string $payProdCur
+     *
+     * @return self
+     */
+    public function setPayProdCur(string $payProdCur) : self
+    {
+        $this->payProdCur = $payProdCur;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string
+     */
     public function getPlan() : string
     {
         return $this->plan;
@@ -623,6 +743,48 @@ class ObjsTeam
     public function setPlan(string $plan) : self
     {
         $this->plan = $plan;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return ObjsPrimaryOwner
+     */
+    public function getPrimaryOwner() : ObjsPrimaryOwner
+    {
+        return $this->primaryOwner;
+    }
+    /**
+     * 
+     *
+     * @param ObjsPrimaryOwner $primaryOwner
+     *
+     * @return self
+     */
+    public function setPrimaryOwner(ObjsPrimaryOwner $primaryOwner) : self
+    {
+        $this->primaryOwner = $primaryOwner;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return ObjsTeamSsoProvider
+     */
+    public function getSsoProvider() : ObjsTeamSsoProvider
+    {
+        return $this->ssoProvider;
+    }
+    /**
+     * 
+     *
+     * @param ObjsTeamSsoProvider $ssoProvider
+     *
+     * @return self
+     */
+    public function setSsoProvider(ObjsTeamSsoProvider $ssoProvider) : self
+    {
+        $this->ssoProvider = $ssoProvider;
         return $this;
     }
 }

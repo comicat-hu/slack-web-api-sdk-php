@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class AppsPermissionsInfoGetResponse200InfoNormalizer implements DenormalizerInt
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\AppsPermissionsInfoGetResponse200Info();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('app_home', $data)) {
             $object->setAppHome($this->denormalizer->denormalize($data['app_home'], 'Comicat\\Slack\\Api\\Model\\AppsPermissionsInfoGetResponse200InfoAppHome', 'json', $context));
         }
@@ -56,24 +59,12 @@ class AppsPermissionsInfoGetResponse200InfoNormalizer implements DenormalizerInt
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getAppHome()) {
-            $data['app_home'] = $this->normalizer->normalize($object->getAppHome(), 'json', $context);
-        }
-        if (null !== $object->getChannel()) {
-            $data['channel'] = $this->normalizer->normalize($object->getChannel(), 'json', $context);
-        }
-        if (null !== $object->getGroup()) {
-            $data['group'] = $this->normalizer->normalize($object->getGroup(), 'json', $context);
-        }
-        if (null !== $object->getIm()) {
-            $data['im'] = $this->normalizer->normalize($object->getIm(), 'json', $context);
-        }
-        if (null !== $object->getMpim()) {
-            $data['mpim'] = $this->normalizer->normalize($object->getMpim(), 'json', $context);
-        }
-        if (null !== $object->getTeam()) {
-            $data['team'] = $this->normalizer->normalize($object->getTeam(), 'json', $context);
-        }
+        $data['app_home'] = $this->normalizer->normalize($object->getAppHome(), 'json', $context);
+        $data['channel'] = $this->normalizer->normalize($object->getChannel(), 'json', $context);
+        $data['group'] = $this->normalizer->normalize($object->getGroup(), 'json', $context);
+        $data['im'] = $this->normalizer->normalize($object->getIm(), 'json', $context);
+        $data['mpim'] = $this->normalizer->normalize($object->getMpim(), 'json', $context);
+        $data['team'] = $this->normalizer->normalize($object->getTeam(), 'json', $context);
         return $data;
     }
 }

@@ -7,7 +7,7 @@ class FilesInfoGetResponse200
     /**
      * 
      *
-     * @var 
+     * @var mixed[]
      */
     protected $comments;
     /**
@@ -43,26 +43,26 @@ class FilesInfoGetResponse200
     /**
      * 
      *
-     * @var ObjsResponseMetadata
+     * @var mixed
      */
     protected $responseMetadata;
     /**
      * 
      *
-     * @return 
+     * @return mixed[]
      */
-    public function getComments()
+    public function getComments() : array
     {
         return $this->comments;
     }
     /**
      * 
      *
-     * @param  $comments
+     * @param mixed[] $comments
      *
      * @return self
      */
-    public function setComments($comments) : self
+    public function setComments(array $comments) : self
     {
         $this->comments = $comments;
         return $this;
@@ -175,20 +175,20 @@ class FilesInfoGetResponse200
     /**
      * 
      *
-     * @return ObjsResponseMetadata
+     * @return mixed
      */
-    public function getResponseMetadata() : ObjsResponseMetadata
+    public function getResponseMetadata()
     {
         return $this->responseMetadata;
     }
     /**
      * 
      *
-     * @param ObjsResponseMetadata $responseMetadata
+     * @param mixed $responseMetadata
      *
      * @return self
      */
-    public function setResponseMetadata(ObjsResponseMetadata $responseMetadata) : self
+    public function setResponseMetadata($responseMetadata) : self
     {
         $this->responseMetadata = $responseMetadata;
         return $this;

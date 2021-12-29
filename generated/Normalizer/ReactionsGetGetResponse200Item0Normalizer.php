@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ReactionsGetGetResponse200Item0Normalizer implements DenormalizerInterface
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ReactionsGetGetResponse200Item0();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('channel', $data)) {
             $object->setChannel($data['channel']);
         }
@@ -50,18 +53,10 @@ class ReactionsGetGetResponse200Item0Normalizer implements DenormalizerInterface
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getChannel()) {
-            $data['channel'] = $object->getChannel();
-        }
-        if (null !== $object->getMessage()) {
-            $data['message'] = $this->normalizer->normalize($object->getMessage(), 'json', $context);
-        }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
-        if (null !== $object->getType()) {
-            $data['type'] = $object->getType();
-        }
+        $data['channel'] = $object->getChannel();
+        $data['message'] = $this->normalizer->normalize($object->getMessage(), 'json', $context);
+        $data['ok'] = $object->getOk();
+        $data['type'] = $object->getType();
         return $data;
     }
 }

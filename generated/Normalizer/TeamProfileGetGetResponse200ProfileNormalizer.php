@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class TeamProfileGetGetResponse200ProfileNormalizer implements DenormalizerInter
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\TeamProfileGetGetResponse200Profile();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('fields', $data)) {
             $values = array();
             foreach ($data['fields'] as $value) {
@@ -45,13 +48,11 @@ class TeamProfileGetGetResponse200ProfileNormalizer implements DenormalizerInter
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getFields()) {
-            $values = array();
-            foreach ($object->getFields() as $value) {
-                $values[] = $this->normalizer->normalize($value, 'json', $context);
-            }
-            $data['fields'] = $values;
+        $values = array();
+        foreach ($object->getFields() as $value) {
+            $values[] = $this->normalizer->normalize($value, 'json', $context);
         }
+        $data['fields'] = $values;
         return $data;
     }
 }

@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsUserItem1Normalizer implements DenormalizerInterface, NormalizerInterf
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsUserItem1();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('color', $data)) {
             $object->setColor($data['color']);
         }
@@ -60,6 +63,9 @@ class ObjsUserItem1Normalizer implements DenormalizerInterface, NormalizerInterf
         if (\array_key_exists('is_external', $data)) {
             $object->setIsExternal($data['is_external']);
         }
+        if (\array_key_exists('is_forgotten', $data)) {
+            $object->setIsForgotten($data['is_forgotten']);
+        }
         if (\array_key_exists('is_owner', $data)) {
             $object->setIsOwner($data['is_owner']);
         }
@@ -68,6 +74,9 @@ class ObjsUserItem1Normalizer implements DenormalizerInterface, NormalizerInterf
         }
         if (\array_key_exists('is_restricted', $data)) {
             $object->setIsRestricted($data['is_restricted']);
+        }
+        if (\array_key_exists('is_stranger', $data)) {
+            $object->setIsStranger($data['is_stranger']);
         }
         if (\array_key_exists('is_ultra_restricted', $data)) {
             $object->setIsUltraRestricted($data['is_ultra_restricted']);
@@ -132,20 +141,17 @@ class ObjsUserItem1Normalizer implements DenormalizerInterface, NormalizerInterf
         if (null !== $object->getHas2fa()) {
             $data['has_2fa'] = $object->getHas2fa();
         }
-        if (null !== $object->getId()) {
-            $data['id'] = $object->getId();
-        }
+        $data['id'] = $object->getId();
         if (null !== $object->getIsAdmin()) {
             $data['is_admin'] = $object->getIsAdmin();
         }
-        if (null !== $object->getIsAppUser()) {
-            $data['is_app_user'] = $object->getIsAppUser();
-        }
-        if (null !== $object->getIsBot()) {
-            $data['is_bot'] = $object->getIsBot();
-        }
+        $data['is_app_user'] = $object->getIsAppUser();
+        $data['is_bot'] = $object->getIsBot();
         if (null !== $object->getIsExternal()) {
             $data['is_external'] = $object->getIsExternal();
+        }
+        if (null !== $object->getIsForgotten()) {
+            $data['is_forgotten'] = $object->getIsForgotten();
         }
         if (null !== $object->getIsOwner()) {
             $data['is_owner'] = $object->getIsOwner();
@@ -156,21 +162,20 @@ class ObjsUserItem1Normalizer implements DenormalizerInterface, NormalizerInterf
         if (null !== $object->getIsRestricted()) {
             $data['is_restricted'] = $object->getIsRestricted();
         }
+        if (null !== $object->getIsStranger()) {
+            $data['is_stranger'] = $object->getIsStranger();
+        }
         if (null !== $object->getIsUltraRestricted()) {
             $data['is_ultra_restricted'] = $object->getIsUltraRestricted();
         }
         if (null !== $object->getLocale()) {
             $data['locale'] = $object->getLocale();
         }
-        if (null !== $object->getName()) {
-            $data['name'] = $object->getName();
-        }
+        $data['name'] = $object->getName();
         if (null !== $object->getPresence()) {
             $data['presence'] = $object->getPresence();
         }
-        if (null !== $object->getProfile()) {
-            $data['profile'] = $this->normalizer->normalize($object->getProfile(), 'json', $context);
-        }
+        $data['profile'] = $this->normalizer->normalize($object->getProfile(), 'json', $context);
         if (null !== $object->getRealName()) {
             $data['real_name'] = $object->getRealName();
         }
@@ -199,9 +204,7 @@ class ObjsUserItem1Normalizer implements DenormalizerInterface, NormalizerInterf
         if (null !== $object->getTzOffset()) {
             $data['tz_offset'] = $object->getTzOffset();
         }
-        if (null !== $object->getUpdated()) {
-            $data['updated'] = $object->getUpdated();
-        }
+        $data['updated'] = $object->getUpdated();
         return $data;
     }
 }

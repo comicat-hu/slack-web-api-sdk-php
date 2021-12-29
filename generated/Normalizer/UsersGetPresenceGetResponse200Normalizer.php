@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class UsersGetPresenceGetResponse200Normalizer implements DenormalizerInterface,
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\UsersGetPresenceGetResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('auto_away', $data)) {
             $object->setAutoAway($data['auto_away']);
             unset($data['auto_away']);
@@ -83,15 +86,11 @@ class UsersGetPresenceGetResponse200Normalizer implements DenormalizerInterface,
         if (null !== $object->getManualAway()) {
             $data['manual_away'] = $object->getManualAway();
         }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
+        $data['ok'] = $object->getOk();
         if (null !== $object->getOnline()) {
             $data['online'] = $object->getOnline();
         }
-        if (null !== $object->getPresence()) {
-            $data['presence'] = $object->getPresence();
-        }
+        $data['presence'] = $object->getPresence();
         foreach ($object as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $data[$key] = $value;

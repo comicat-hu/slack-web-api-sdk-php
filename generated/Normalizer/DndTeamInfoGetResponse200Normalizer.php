@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,28 +33,28 @@ class DndTeamInfoGetResponse200Normalizer implements DenormalizerInterface, Norm
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\DndTeamInfoGetResponse200();
-        if (\array_key_exists('cached', $data)) {
-            $object->setCached($data['cached']);
+        if (null === $data || false === \is_array($data)) {
+            return $object;
         }
         if (\array_key_exists('ok', $data)) {
             $object->setOk($data['ok']);
+            unset($data['ok']);
         }
-        if (\array_key_exists('users', $data)) {
-            $object->setUsers($data['users']);
+        foreach ($data as $key => $value) {
+            if (preg_match('/.*/', (string) $key)) {
+                $object[$key] = $value;
+            }
         }
         return $object;
     }
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getCached()) {
-            $data['cached'] = $object->getCached();
-        }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
-        if (null !== $object->getUsers()) {
-            $data['users'] = $object->getUsers();
+        $data['ok'] = $object->getOk();
+        foreach ($object as $key => $value) {
+            if (preg_match('/.*/', (string) $key)) {
+                $data[$key] = $value;
+            }
         }
         return $data;
     }

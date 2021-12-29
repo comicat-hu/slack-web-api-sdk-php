@@ -2,23 +2,23 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ChatScheduleMessage extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ChatScheduleMessage extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Schedules a message to be sent to a channel.
      *
      * @param array $formParameters {
-     *     @var float $thread_ts Provide another message's `ts` value to make this message a reply. Avoid using a reply's `ts` value; use its parent instead.
-     *     @var string $blocks A JSON-based array of structured blocks, presented as a URL-encoded string.
-     *     @var string $attachments A JSON-based array of structured attachments, presented as a URL-encoded string.
-     *     @var bool $unfurl_links Pass true to enable unfurling of primarily text-based content.
+     *     @var string $channel Channel, private group, or DM channel to send message to. Can be an encoded ID, or a name. See [below](#channels) for more details.
      *     @var string $text How this field works and whether it is required depends on other fields you use in your API call. [See below](#text_usage) for more detail.
-     *     @var bool $link_names Find and link channel names and usernames.
-     *     @var bool $unfurl_media Pass false to disable unfurling of media content.
+     *     @var string $post_at Unix EPOCH timestamp of time in future to send the message.
      *     @var string $parse Change how messages are treated. Defaults to `none`. See [chat.postMessage](chat.postMessage#formatting).
      *     @var bool $as_user Pass true to post the message as the authed user, instead of as a bot. Defaults to false. See [chat.postMessage](chat.postMessage#authorship).
-     *     @var string $post_at Unix EPOCH timestamp of time in future to send the message.
-     *     @var string $channel Channel, private group, or DM channel to send message to. Can be an encoded ID, or a name. See [below](#channels) for more details.
+     *     @var bool $link_names Find and link channel names and usernames.
+     *     @var string $attachments A JSON-based array of structured attachments, presented as a URL-encoded string.
+     *     @var string $blocks A JSON-based array of structured blocks, presented as a URL-encoded string.
+     *     @var bool $unfurl_links Pass true to enable unfurling of primarily text-based content.
+     *     @var bool $unfurl_media Pass false to disable unfurling of media content.
+     *     @var float $thread_ts Provide another message's `ts` value to make this message a reply. Avoid using a reply's `ts` value; use its parent instead.
      *     @var bool $reply_broadcast Used in conjunction with `thread_ts` and indicates whether reply should be made visible to everyone in the channel or conversation. Defaults to `false`.
      * }
      * @param array $headerParameters {
@@ -30,7 +30,7 @@ class ChatScheduleMessage extends \Jane\OpenApiRuntime\Client\BaseEndpoint imple
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -50,20 +50,20 @@ class ChatScheduleMessage extends \Jane\OpenApiRuntime\Client\BaseEndpoint imple
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('thread_ts', 'blocks', 'attachments', 'unfurl_links', 'text', 'link_names', 'unfurl_media', 'parse', 'as_user', 'post_at', 'channel', 'reply_broadcast'));
+        $optionsResolver->setDefined(array('channel', 'text', 'post_at', 'parse', 'as_user', 'link_names', 'attachments', 'blocks', 'unfurl_links', 'unfurl_media', 'thread_ts', 'reply_broadcast'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('thread_ts', array('float'));
-        $optionsResolver->setAllowedTypes('blocks', array('string'));
-        $optionsResolver->setAllowedTypes('attachments', array('string'));
-        $optionsResolver->setAllowedTypes('unfurl_links', array('bool'));
+        $optionsResolver->setAllowedTypes('channel', array('string'));
         $optionsResolver->setAllowedTypes('text', array('string'));
-        $optionsResolver->setAllowedTypes('link_names', array('bool'));
-        $optionsResolver->setAllowedTypes('unfurl_media', array('bool'));
+        $optionsResolver->setAllowedTypes('post_at', array('string'));
         $optionsResolver->setAllowedTypes('parse', array('string'));
         $optionsResolver->setAllowedTypes('as_user', array('bool'));
-        $optionsResolver->setAllowedTypes('post_at', array('string'));
-        $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('link_names', array('bool'));
+        $optionsResolver->setAllowedTypes('attachments', array('string'));
+        $optionsResolver->setAllowedTypes('blocks', array('string'));
+        $optionsResolver->setAllowedTypes('unfurl_links', array('bool'));
+        $optionsResolver->setAllowedTypes('unfurl_media', array('bool'));
+        $optionsResolver->setAllowedTypes('thread_ts', array('float'));
         $optionsResolver->setAllowedTypes('reply_broadcast', array('bool'));
         return $optionsResolver;
     }
@@ -82,7 +82,7 @@ class ChatScheduleMessage extends \Jane\OpenApiRuntime\Client\BaseEndpoint imple
      *
      * @return null|\Comicat\Slack\Api\Model\ChatScheduleMessagePostResponse200|\Comicat\Slack\Api\Model\ChatScheduleMessagePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ChatScheduleMessagePostResponse200', 'json');

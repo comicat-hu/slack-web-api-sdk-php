@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class TeamIntegrationLogsGetResponse200LogsItemNormalizer implements Denormalize
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\TeamIntegrationLogsGetResponse200LogsItem();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('admin_app_id', $data)) {
             $object->setAdminAppId($data['admin_app_id']);
         }
@@ -74,36 +77,22 @@ class TeamIntegrationLogsGetResponse200LogsItemNormalizer implements Denormalize
         if (null !== $object->getAdminAppId()) {
             $data['admin_app_id'] = $object->getAdminAppId();
         }
-        if (null !== $object->getAppId()) {
-            $data['app_id'] = $object->getAppId();
-        }
-        if (null !== $object->getAppType()) {
-            $data['app_type'] = $object->getAppType();
-        }
-        if (null !== $object->getChangeType()) {
-            $data['change_type'] = $object->getChangeType();
-        }
+        $data['app_id'] = $object->getAppId();
+        $data['app_type'] = $object->getAppType();
+        $data['change_type'] = $object->getChangeType();
         if (null !== $object->getChannel()) {
             $data['channel'] = $object->getChannel();
         }
-        if (null !== $object->getDate()) {
-            $data['date'] = $object->getDate();
-        }
-        if (null !== $object->getScope()) {
-            $data['scope'] = $object->getScope();
-        }
+        $data['date'] = $object->getDate();
+        $data['scope'] = $object->getScope();
         if (null !== $object->getServiceId()) {
             $data['service_id'] = $object->getServiceId();
         }
         if (null !== $object->getServiceType()) {
             $data['service_type'] = $object->getServiceType();
         }
-        if (null !== $object->getUserId()) {
-            $data['user_id'] = $object->getUserId();
-        }
-        if (null !== $object->getUserName()) {
-            $data['user_name'] = $object->getUserName();
-        }
+        $data['user_id'] = $object->getUserId();
+        $data['user_name'] = $object->getUserName();
         return $data;
     }
 }

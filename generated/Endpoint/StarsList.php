@@ -2,24 +2,24 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class StarsList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class StarsList extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Lists stars for a user.
      *
      * @param array $queryParameters {
-     *     @var string $count 
-     *     @var string $cursor Parameter for pagination. Set `cursor` equal to the `next_cursor` attribute returned by the previous request's `response_metadata`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection. See [pagination](/docs/pagination) for more details.
      *     @var string $token Authentication token. Requires scope: `stars:read`
-     *     @var int $limit The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached.
+     *     @var string $count 
      *     @var string $page 
+     *     @var string $cursor Parameter for pagination. Set `cursor` equal to the `next_cursor` attribute returned by the previous request's `response_metadata`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection. See [pagination](/docs/pagination) for more details.
+     *     @var int $limit The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached.
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -39,14 +39,14 @@ class StarsList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jan
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('count', 'cursor', 'token', 'limit', 'page'));
+        $optionsResolver->setDefined(array('token', 'count', 'page', 'cursor', 'limit'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('count', array('string'));
-        $optionsResolver->setAllowedTypes('cursor', array('string'));
         $optionsResolver->setAllowedTypes('token', array('string'));
-        $optionsResolver->setAllowedTypes('limit', array('int'));
+        $optionsResolver->setAllowedTypes('count', array('string'));
         $optionsResolver->setAllowedTypes('page', array('string'));
+        $optionsResolver->setAllowedTypes('cursor', array('string'));
+        $optionsResolver->setAllowedTypes('limit', array('int'));
         return $optionsResolver;
     }
     /**
@@ -55,7 +55,7 @@ class StarsList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jan
      *
      * @return null|\Comicat\Slack\Api\Model\StarsListGetResponse200|\Comicat\Slack\Api\Model\StarsListGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\StarsListGetResponse200', 'json');

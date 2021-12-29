@@ -2,16 +2,16 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class StarsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class StarsAdd extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Adds a star to an item.
      *
      * @param array $formParameters {
+     *     @var string $channel Channel to add star to, or channel where the message to add star to was posted (used with `timestamp`).
+     *     @var string $file File to add star to.
      *     @var string $file_comment File comment to add star to.
      *     @var string $timestamp Timestamp of the message to add star to.
-     *     @var string $file File to add star to.
-     *     @var string $channel Channel to add star to, or channel where the message to add star to was posted (used with `timestamp`).
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `stars:write`
@@ -22,7 +22,7 @@ class StarsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -42,13 +42,13 @@ class StarsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('file_comment', 'timestamp', 'file', 'channel'));
+        $optionsResolver->setDefined(array('channel', 'file', 'file_comment', 'timestamp'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
+        $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('file', array('string'));
         $optionsResolver->setAllowedTypes('file_comment', array('string'));
         $optionsResolver->setAllowedTypes('timestamp', array('string'));
-        $optionsResolver->setAllowedTypes('file', array('string'));
-        $optionsResolver->setAllowedTypes('channel', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -66,7 +66,7 @@ class StarsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane
      *
      * @return null|\Comicat\Slack\Api\Model\StarsAddPostResponse200|\Comicat\Slack\Api\Model\StarsAddPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\StarsAddPostResponse200', 'json');

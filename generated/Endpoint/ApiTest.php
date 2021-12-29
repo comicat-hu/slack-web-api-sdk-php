@@ -2,21 +2,21 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ApiTest extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ApiTest extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Checks API calling code.
      *
      * @param array $queryParameters {
-     *     @var string $foo example property to return
      *     @var string $error Error response to return
+     *     @var string $foo example property to return
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -36,11 +36,11 @@ class ApiTest extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('foo', 'error'));
+        $optionsResolver->setDefined(array('error', 'foo'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('foo', array('string'));
         $optionsResolver->setAllowedTypes('error', array('string'));
+        $optionsResolver->setAllowedTypes('foo', array('string'));
         return $optionsResolver;
     }
     /**
@@ -49,7 +49,7 @@ class ApiTest extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\
      *
      * @return null|\Comicat\Slack\Api\Model\ApiTestGetResponse200|\Comicat\Slack\Api\Model\ApiTestGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ApiTestGetResponse200', 'json');

@@ -2,23 +2,23 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class FilesRemoteShare extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class FilesRemoteShare extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Share a remote file into a channel.
      *
      * @param array $queryParameters {
-     *     @var string $channels Comma-separated list of channel IDs where the file will be shared.
      *     @var string $token Authentication token. Requires scope: `remote_files:share`
-     *     @var string $external_id Creator defined GUID for the file.
-     *     @var string $file Specify a file by providing its ID.
+     *     @var string $file Specify a file registered with Slack by providing its ID. Either this field or `external_id` or both are required.
+     *     @var string $external_id The globally unique identifier (GUID) for the file, as set by the app registering the file with Slack.  Either this field or `file` or both are required.
+     *     @var string $channels Comma-separated list of channel IDs where the file will be shared.
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -38,13 +38,13 @@ class FilesRemoteShare extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('channels', 'token', 'external_id', 'file'));
+        $optionsResolver->setDefined(array('token', 'file', 'external_id', 'channels'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('channels', array('string'));
         $optionsResolver->setAllowedTypes('token', array('string'));
-        $optionsResolver->setAllowedTypes('external_id', array('string'));
         $optionsResolver->setAllowedTypes('file', array('string'));
+        $optionsResolver->setAllowedTypes('external_id', array('string'));
+        $optionsResolver->setAllowedTypes('channels', array('string'));
         return $optionsResolver;
     }
     /**
@@ -53,7 +53,7 @@ class FilesRemoteShare extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
      *
      * @return null|\Comicat\Slack\Api\Model\FilesRemoteShareGetResponse200|\Comicat\Slack\Api\Model\FilesRemoteShareGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\FilesRemoteShareGetResponse200', 'json');

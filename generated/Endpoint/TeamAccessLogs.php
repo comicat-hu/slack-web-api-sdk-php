@@ -2,23 +2,23 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class TeamAccessLogs extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class TeamAccessLogs extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Gets the access logs for the current team.
      *
      * @param array $queryParameters {
-     *     @var int $count 
      *     @var string $token Authentication token. Requires scope: `admin`
-     *     @var int $page 
      *     @var string $before End of time range of logs to include in results (inclusive).
+     *     @var string $count 
+     *     @var string $page 
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -38,13 +38,13 @@ class TeamAccessLogs extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('count', 'token', 'page', 'before'));
+        $optionsResolver->setDefined(array('token', 'before', 'count', 'page'));
         $optionsResolver->setRequired(array('token'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('count', array('int'));
         $optionsResolver->setAllowedTypes('token', array('string'));
-        $optionsResolver->setAllowedTypes('page', array('int'));
         $optionsResolver->setAllowedTypes('before', array('string'));
+        $optionsResolver->setAllowedTypes('count', array('string'));
+        $optionsResolver->setAllowedTypes('page', array('string'));
         return $optionsResolver;
     }
     /**
@@ -53,7 +53,7 @@ class TeamAccessLogs extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements
      *
      * @return null|\Comicat\Slack\Api\Model\TeamAccessLogsGetResponse200|\Comicat\Slack\Api\Model\TeamAccessLogsGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\TeamAccessLogsGetResponse200', 'json');

@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ChatUpdatePostResponse200MessageNormalizer implements DenormalizerInterfac
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ChatUpdatePostResponse200Message();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('attachments', $data)) {
             $values = array();
             foreach ($data['attachments'] as $value) {
@@ -41,11 +44,7 @@ class ChatUpdatePostResponse200MessageNormalizer implements DenormalizerInterfac
             $object->setAttachments($values);
         }
         if (\array_key_exists('blocks', $data)) {
-            $values_1 = array();
-            foreach ($data['blocks'] as $value_1) {
-                $values_1[] = $this->denormalizer->denormalize($value_1, 'Comicat\\Slack\\Api\\Model\\BlocksItem', 'json', $context);
-            }
-            $object->setBlocks($values_1);
+            $object->setBlocks($data['blocks']);
         }
         if (\array_key_exists('text', $data)) {
             $object->setText($data['text']);
@@ -63,15 +62,9 @@ class ChatUpdatePostResponse200MessageNormalizer implements DenormalizerInterfac
             $data['attachments'] = $values;
         }
         if (null !== $object->getBlocks()) {
-            $values_1 = array();
-            foreach ($object->getBlocks() as $value_1) {
-                $values_1[] = $this->normalizer->normalize($value_1, 'json', $context);
-            }
-            $data['blocks'] = $values_1;
+            $data['blocks'] = $object->getBlocks();
         }
-        if (null !== $object->getText()) {
-            $data['text'] = $object->getText();
-        }
+        $data['text'] = $object->getText();
         return $data;
     }
 }

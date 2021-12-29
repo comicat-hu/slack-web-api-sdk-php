@@ -2,15 +2,15 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AdminUsersList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AdminUsersList extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * List users on a workspace
      *
      * @param array $queryParameters {
+     *     @var string $team_id The ID (`T1234`) of the workspace.
      *     @var string $cursor Set `cursor` to `next_cursor` returned by the previous call to list items in the next page.
      *     @var int $limit Limit for how many users to be retrieved per page
-     *     @var string $team_id The ID (`T1234`) of the workspace.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `admin.users:read`
@@ -21,7 +21,7 @@ class AdminUsersList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements
         $this->queryParameters = $queryParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -41,12 +41,12 @@ class AdminUsersList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('cursor', 'limit', 'team_id'));
+        $optionsResolver->setDefined(array('team_id', 'cursor', 'limit'));
         $optionsResolver->setRequired(array('team_id'));
         $optionsResolver->setDefaults(array());
+        $optionsResolver->setAllowedTypes('team_id', array('string'));
         $optionsResolver->setAllowedTypes('cursor', array('string'));
         $optionsResolver->setAllowedTypes('limit', array('int'));
-        $optionsResolver->setAllowedTypes('team_id', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -64,7 +64,7 @@ class AdminUsersList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements
      *
      * @return null|\Comicat\Slack\Api\Model\AdminUsersListGetResponse200|\Comicat\Slack\Api\Model\AdminUsersListGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AdminUsersListGetResponse200', 'json');

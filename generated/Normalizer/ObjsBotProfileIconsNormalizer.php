@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsBotProfileIconsNormalizer implements DenormalizerInterface, Normalizer
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsBotProfileIcons();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('image_36', $data)) {
             $object->setImage36($data['image_36']);
         }
@@ -47,15 +50,9 @@ class ObjsBotProfileIconsNormalizer implements DenormalizerInterface, Normalizer
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getImage36()) {
-            $data['image_36'] = $object->getImage36();
-        }
-        if (null !== $object->getImage48()) {
-            $data['image_48'] = $object->getImage48();
-        }
-        if (null !== $object->getImage72()) {
-            $data['image_72'] = $object->getImage72();
-        }
+        $data['image_36'] = $object->getImage36();
+        $data['image_48'] = $object->getImage48();
+        $data['image_72'] = $object->getImage72();
         return $data;
     }
 }

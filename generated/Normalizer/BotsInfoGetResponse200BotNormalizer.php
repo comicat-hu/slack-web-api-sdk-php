@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class BotsInfoGetResponse200BotNormalizer implements DenormalizerInterface, Norm
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\BotsInfoGetResponse200Bot();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('app_id', $data)) {
             $object->setAppId($data['app_id']);
         }
@@ -59,24 +62,12 @@ class BotsInfoGetResponse200BotNormalizer implements DenormalizerInterface, Norm
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getAppId()) {
-            $data['app_id'] = $object->getAppId();
-        }
-        if (null !== $object->getDeleted()) {
-            $data['deleted'] = $object->getDeleted();
-        }
-        if (null !== $object->getIcons()) {
-            $data['icons'] = $this->normalizer->normalize($object->getIcons(), 'json', $context);
-        }
-        if (null !== $object->getId()) {
-            $data['id'] = $object->getId();
-        }
-        if (null !== $object->getName()) {
-            $data['name'] = $object->getName();
-        }
-        if (null !== $object->getUpdated()) {
-            $data['updated'] = $object->getUpdated();
-        }
+        $data['app_id'] = $object->getAppId();
+        $data['deleted'] = $object->getDeleted();
+        $data['icons'] = $this->normalizer->normalize($object->getIcons(), 'json', $context);
+        $data['id'] = $object->getId();
+        $data['name'] = $object->getName();
+        $data['updated'] = $object->getUpdated();
         if (null !== $object->getUserId()) {
             $data['user_id'] = $object->getUserId();
         }

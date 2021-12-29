@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,12 @@ class UsersSetPhotoPostResponsedefaultNormalizer implements DenormalizerInterfac
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\UsersSetPhotoPostResponsedefault();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
+        if (\array_key_exists('callstack', $data)) {
+            $object->setCallstack($data['callstack']);
+        }
         if (\array_key_exists('debug_step', $data)) {
             $object->setDebugStep($data['debug_step']);
         }
@@ -53,18 +59,17 @@ class UsersSetPhotoPostResponsedefaultNormalizer implements DenormalizerInterfac
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
+        if (null !== $object->getCallstack()) {
+            $data['callstack'] = $object->getCallstack();
+        }
         if (null !== $object->getDebugStep()) {
             $data['debug_step'] = $object->getDebugStep();
         }
         if (null !== $object->getDims()) {
             $data['dims'] = $object->getDims();
         }
-        if (null !== $object->getError()) {
-            $data['error'] = $object->getError();
-        }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
+        $data['error'] = $object->getError();
+        $data['ok'] = $object->getOk();
         if (null !== $object->getTimeIdent()) {
             $data['time_ident'] = $object->getTimeIdent();
         }

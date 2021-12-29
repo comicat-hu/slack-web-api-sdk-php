@@ -2,14 +2,14 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AdminUsersSessionReset extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AdminUsersSessionReset extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Wipes all valid sessions on all devices for a given user
      *
      * @param array $formParameters {
-     *     @var bool $mobile_only Only expire mobile sessions (default: false)
      *     @var string $user_id The ID of the user to wipe sessions for
+     *     @var bool $mobile_only Only expire mobile sessions (default: false)
      *     @var bool $web_only Only expire web sessions (default: false)
      * }
      * @param array $headerParameters {
@@ -21,7 +21,7 @@ class AdminUsersSessionReset extends \Jane\OpenApiRuntime\Client\BaseEndpoint im
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -41,11 +41,11 @@ class AdminUsersSessionReset extends \Jane\OpenApiRuntime\Client\BaseEndpoint im
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('mobile_only', 'user_id', 'web_only'));
+        $optionsResolver->setDefined(array('user_id', 'mobile_only', 'web_only'));
         $optionsResolver->setRequired(array('user_id'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('mobile_only', array('bool'));
         $optionsResolver->setAllowedTypes('user_id', array('string'));
+        $optionsResolver->setAllowedTypes('mobile_only', array('bool'));
         $optionsResolver->setAllowedTypes('web_only', array('bool'));
         return $optionsResolver;
     }
@@ -64,7 +64,7 @@ class AdminUsersSessionReset extends \Jane\OpenApiRuntime\Client\BaseEndpoint im
      *
      * @return null|\Comicat\Slack\Api\Model\AdminUsersSessionResetPostResponse200|\Comicat\Slack\Api\Model\AdminUsersSessionResetPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AdminUsersSessionResetPostResponse200', 'json');

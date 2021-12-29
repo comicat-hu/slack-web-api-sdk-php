@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ConversationsOpenPostResponse200Normalizer implements DenormalizerInterfac
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ConversationsOpenPostResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('already_open', $data)) {
             $object->setAlreadyOpen($data['already_open']);
         }
@@ -53,15 +56,11 @@ class ConversationsOpenPostResponse200Normalizer implements DenormalizerInterfac
         if (null !== $object->getAlreadyOpen()) {
             $data['already_open'] = $object->getAlreadyOpen();
         }
-        if (null !== $object->getChannel()) {
-            $data['channel'] = $object->getChannel();
-        }
+        $data['channel'] = $object->getChannel();
         if (null !== $object->getNoOp()) {
             $data['no_op'] = $object->getNoOp();
         }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
+        $data['ok'] = $object->getOk();
         return $data;
     }
 }

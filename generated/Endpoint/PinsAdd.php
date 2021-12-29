@@ -2,14 +2,14 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class PinsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class PinsAdd extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Pins an item to a channel.
      *
      * @param array $formParameters {
-     *     @var float $timestamp Timestamp of the message to pin.
      *     @var string $channel Channel to pin the item in.
+     *     @var string $timestamp Timestamp of the message to pin.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `pins:write`
@@ -20,7 +20,7 @@ class PinsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -40,18 +40,18 @@ class PinsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('timestamp', 'channel'));
-        $optionsResolver->setRequired(array());
+        $optionsResolver->setDefined(array('channel', 'timestamp'));
+        $optionsResolver->setRequired(array('channel'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('timestamp', array('float'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('timestamp', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getHeadersOptionsResolver();
         $optionsResolver->setDefined(array('token'));
-        $optionsResolver->setRequired(array());
+        $optionsResolver->setRequired(array('token'));
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('token', array('string'));
         return $optionsResolver;
@@ -62,7 +62,7 @@ class PinsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\
      *
      * @return null|\Comicat\Slack\Api\Model\PinsAddPostResponse200|\Comicat\Slack\Api\Model\PinsAddPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\PinsAddPostResponse200', 'json');

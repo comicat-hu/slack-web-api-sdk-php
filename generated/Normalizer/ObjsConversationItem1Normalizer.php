@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsConversationItem1Normalizer implements DenormalizerInterface, Normaliz
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsConversationItem1();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('accepted_user', $data)) {
             $object->setAcceptedUser($data['accepted_user']);
         }
@@ -230,18 +233,12 @@ class ObjsConversationItem1Normalizer implements DenormalizerInterface, Normaliz
         if (null !== $object->getConversationHostId()) {
             $data['conversation_host_id'] = $object->getConversationHostId();
         }
-        if (null !== $object->getCreated()) {
-            $data['created'] = $object->getCreated();
-        }
-        if (null !== $object->getCreator()) {
-            $data['creator'] = $object->getCreator();
-        }
+        $data['created'] = $object->getCreated();
+        $data['creator'] = $object->getCreator();
         if (null !== $object->getDisplayCounts()) {
             $data['display_counts'] = $this->normalizer->normalize($object->getDisplayCounts(), 'json', $context);
         }
-        if (null !== $object->getId()) {
-            $data['id'] = $object->getId();
-        }
+        $data['id'] = $object->getId();
         if (null !== $object->getInternalTeamIds()) {
             $values_1 = array();
             foreach ($object->getInternalTeamIds() as $value_1) {
@@ -249,57 +246,39 @@ class ObjsConversationItem1Normalizer implements DenormalizerInterface, Normaliz
             }
             $data['internal_team_ids'] = $values_1;
         }
-        if (null !== $object->getIsArchived()) {
-            $data['is_archived'] = $object->getIsArchived();
-        }
-        if (null !== $object->getIsChannel()) {
-            $data['is_channel'] = $object->getIsChannel();
-        }
+        $data['is_archived'] = $object->getIsArchived();
+        $data['is_channel'] = $object->getIsChannel();
         if (null !== $object->getIsExtShared()) {
             $data['is_ext_shared'] = $object->getIsExtShared();
         }
         if (null !== $object->getIsFrozen()) {
             $data['is_frozen'] = $object->getIsFrozen();
         }
-        if (null !== $object->getIsGeneral()) {
-            $data['is_general'] = $object->getIsGeneral();
-        }
-        if (null !== $object->getIsGroup()) {
-            $data['is_group'] = $object->getIsGroup();
-        }
-        if (null !== $object->getIsIm()) {
-            $data['is_im'] = $object->getIsIm();
-        }
+        $data['is_general'] = $object->getIsGeneral();
+        $data['is_group'] = $object->getIsGroup();
+        $data['is_im'] = $object->getIsIm();
         if (null !== $object->getIsMember()) {
             $data['is_member'] = $object->getIsMember();
         }
         if (null !== $object->getIsMoved()) {
             $data['is_moved'] = $object->getIsMoved();
         }
-        if (null !== $object->getIsMpim()) {
-            $data['is_mpim'] = $object->getIsMpim();
-        }
+        $data['is_mpim'] = $object->getIsMpim();
         if (null !== $object->getIsNonThreadable()) {
             $data['is_non_threadable'] = $object->getIsNonThreadable();
         }
         if (null !== $object->getIsOpen()) {
             $data['is_open'] = $object->getIsOpen();
         }
-        if (null !== $object->getIsOrgShared()) {
-            $data['is_org_shared'] = $object->getIsOrgShared();
-        }
+        $data['is_org_shared'] = $object->getIsOrgShared();
         if (null !== $object->getIsPendingExtShared()) {
             $data['is_pending_ext_shared'] = $object->getIsPendingExtShared();
         }
-        if (null !== $object->getIsPrivate()) {
-            $data['is_private'] = $object->getIsPrivate();
-        }
+        $data['is_private'] = $object->getIsPrivate();
         if (null !== $object->getIsReadOnly()) {
             $data['is_read_only'] = $object->getIsReadOnly();
         }
-        if (null !== $object->getIsShared()) {
-            $data['is_shared'] = $object->getIsShared();
-        }
+        $data['is_shared'] = $object->getIsShared();
         if (null !== $object->getIsStarred()) {
             $data['is_starred'] = $object->getIsStarred();
         }
@@ -319,12 +298,8 @@ class ObjsConversationItem1Normalizer implements DenormalizerInterface, Normaliz
             }
             $data['members'] = $values_2;
         }
-        if (null !== $object->getName()) {
-            $data['name'] = $object->getName();
-        }
-        if (null !== $object->getNameNormalized()) {
-            $data['name_normalized'] = $object->getNameNormalized();
-        }
+        $data['name'] = $object->getName();
+        $data['name_normalized'] = $object->getNameNormalized();
         if (null !== $object->getNumMembers()) {
             $data['num_members'] = $object->getNumMembers();
         }
@@ -358,9 +333,7 @@ class ObjsConversationItem1Normalizer implements DenormalizerInterface, Normaliz
         if (null !== $object->getPriority()) {
             $data['priority'] = $object->getPriority();
         }
-        if (null !== $object->getPurpose()) {
-            $data['purpose'] = $this->normalizer->normalize($object->getPurpose(), 'json', $context);
-        }
+        $data['purpose'] = $this->normalizer->normalize($object->getPurpose(), 'json', $context);
         if (null !== $object->getSharedTeamIds()) {
             $values_6 = array();
             foreach ($object->getSharedTeamIds() as $value_6) {
@@ -378,9 +351,7 @@ class ObjsConversationItem1Normalizer implements DenormalizerInterface, Normaliz
         if (null !== $object->getTimezoneCount()) {
             $data['timezone_count'] = $object->getTimezoneCount();
         }
-        if (null !== $object->getTopic()) {
-            $data['topic'] = $this->normalizer->normalize($object->getTopic(), 'json', $context);
-        }
+        $data['topic'] = $this->normalizer->normalize($object->getTopic(), 'json', $context);
         if (null !== $object->getUnlinked()) {
             $data['unlinked'] = $object->getUnlinked();
         }

@@ -2,15 +2,15 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ChatDelete extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ChatDelete extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Deletes a message.
      *
      * @param array $formParameters {
-     *     @var bool $as_user Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope.
      *     @var float $ts Timestamp of the message to be deleted.
      *     @var string $channel Channel containing the message to be deleted.
+     *     @var bool $as_user Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `chat:write`
@@ -21,7 +21,7 @@ class ChatDelete extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -41,12 +41,12 @@ class ChatDelete extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('as_user', 'ts', 'channel'));
+        $optionsResolver->setDefined(array('ts', 'channel', 'as_user'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('as_user', array('bool'));
         $optionsResolver->setAllowedTypes('ts', array('float'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('as_user', array('bool'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -64,7 +64,7 @@ class ChatDelete extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
      *
      * @return null|\Comicat\Slack\Api\Model\ChatDeletePostResponse200|\Comicat\Slack\Api\Model\ChatDeletePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ChatDeletePostResponse200', 'json');

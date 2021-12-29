@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ConversationsRepliesGetResponse200Normalizer implements DenormalizerInterf
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ConversationsRepliesGetResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('has_more', $data)) {
             $object->setHasMore($data['has_more']);
         }
@@ -54,16 +57,12 @@ class ConversationsRepliesGetResponse200Normalizer implements DenormalizerInterf
         if (null !== $object->getHasMore()) {
             $data['has_more'] = $object->getHasMore();
         }
-        if (null !== $object->getMessages()) {
-            $values = array();
-            foreach ($object->getMessages() as $value) {
-                $values[] = $value;
-            }
-            $data['messages'] = $values;
+        $values = array();
+        foreach ($object->getMessages() as $value) {
+            $values[] = $value;
         }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
+        $data['messages'] = $values;
+        $data['ok'] = $object->getOk();
         return $data;
     }
 }

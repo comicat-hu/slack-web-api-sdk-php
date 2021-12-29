@@ -2,17 +2,17 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ReactionsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ReactionsRemove extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Removes a reaction from an item.
      *
      * @param array $formParameters {
      *     @var string $name Reaction (emoji) name.
-     *     @var string $file_comment File comment to remove reaction from.
-     *     @var string $timestamp Timestamp of the message to remove reaction from.
      *     @var string $file File to remove reaction from.
+     *     @var string $file_comment File comment to remove reaction from.
      *     @var string $channel Channel where the message to remove reaction from was posted.
+     *     @var string $timestamp Timestamp of the message to remove reaction from.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `reactions:write`
@@ -23,7 +23,7 @@ class ReactionsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -43,14 +43,14 @@ class ReactionsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('name', 'file_comment', 'timestamp', 'file', 'channel'));
+        $optionsResolver->setDefined(array('name', 'file', 'file_comment', 'channel', 'timestamp'));
         $optionsResolver->setRequired(array('name'));
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('name', array('string'));
-        $optionsResolver->setAllowedTypes('file_comment', array('string'));
-        $optionsResolver->setAllowedTypes('timestamp', array('string'));
         $optionsResolver->setAllowedTypes('file', array('string'));
+        $optionsResolver->setAllowedTypes('file_comment', array('string'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('timestamp', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -68,7 +68,7 @@ class ReactionsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
      *
      * @return null|\Comicat\Slack\Api\Model\ReactionsRemovePostResponse200|\Comicat\Slack\Api\Model\ReactionsRemovePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ReactionsRemovePostResponse200', 'json');

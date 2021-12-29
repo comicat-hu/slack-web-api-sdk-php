@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class UsersSetPhotoPostResponse200ProfileNormalizer implements DenormalizerInter
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\UsersSetPhotoPostResponse200Profile();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('avatar_hash', $data)) {
             $object->setAvatarHash($data['avatar_hash']);
         }
@@ -65,33 +68,15 @@ class UsersSetPhotoPostResponse200ProfileNormalizer implements DenormalizerInter
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getAvatarHash()) {
-            $data['avatar_hash'] = $object->getAvatarHash();
-        }
-        if (null !== $object->getImage1024()) {
-            $data['image_1024'] = $object->getImage1024();
-        }
-        if (null !== $object->getImage192()) {
-            $data['image_192'] = $object->getImage192();
-        }
-        if (null !== $object->getImage24()) {
-            $data['image_24'] = $object->getImage24();
-        }
-        if (null !== $object->getImage32()) {
-            $data['image_32'] = $object->getImage32();
-        }
-        if (null !== $object->getImage48()) {
-            $data['image_48'] = $object->getImage48();
-        }
-        if (null !== $object->getImage512()) {
-            $data['image_512'] = $object->getImage512();
-        }
-        if (null !== $object->getImage72()) {
-            $data['image_72'] = $object->getImage72();
-        }
-        if (null !== $object->getImageOriginal()) {
-            $data['image_original'] = $object->getImageOriginal();
-        }
+        $data['avatar_hash'] = $object->getAvatarHash();
+        $data['image_1024'] = $object->getImage1024();
+        $data['image_192'] = $object->getImage192();
+        $data['image_24'] = $object->getImage24();
+        $data['image_32'] = $object->getImage32();
+        $data['image_48'] = $object->getImage48();
+        $data['image_512'] = $object->getImage512();
+        $data['image_72'] = $object->getImage72();
+        $data['image_original'] = $object->getImageOriginal();
         return $data;
     }
 }

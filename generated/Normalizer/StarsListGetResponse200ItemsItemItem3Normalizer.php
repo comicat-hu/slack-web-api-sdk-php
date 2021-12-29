@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class StarsListGetResponse200ItemsItemItem3Normalizer implements DenormalizerInt
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\StarsListGetResponse200ItemsItemItem3();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('channel', $data)) {
             $object->setChannel($data['channel']);
         }
@@ -47,15 +50,9 @@ class StarsListGetResponse200ItemsItemItem3Normalizer implements DenormalizerInt
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getChannel()) {
-            $data['channel'] = $object->getChannel();
-        }
-        if (null !== $object->getDateCreate()) {
-            $data['date_create'] = $object->getDateCreate();
-        }
-        if (null !== $object->getType()) {
-            $data['type'] = $object->getType();
-        }
+        $data['channel'] = $object->getChannel();
+        $data['date_create'] = $object->getDateCreate();
+        $data['type'] = $object->getType();
         return $data;
     }
 }

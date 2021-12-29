@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsConversationItem2SharesItemNormalizer implements DenormalizerInterface
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsConversationItem2SharesItem();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('date_create', $data)) {
             $object->setDateCreate($data['date_create']);
         }
@@ -53,21 +56,11 @@ class ObjsConversationItem2SharesItemNormalizer implements DenormalizerInterface
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getDateCreate()) {
-            $data['date_create'] = $object->getDateCreate();
-        }
-        if (null !== $object->getId()) {
-            $data['id'] = $object->getId();
-        }
-        if (null !== $object->getIsActive()) {
-            $data['is_active'] = $object->getIsActive();
-        }
-        if (null !== $object->getName()) {
-            $data['name'] = $object->getName();
-        }
-        if (null !== $object->getTeam()) {
-            $data['team'] = $this->normalizer->normalize($object->getTeam(), 'json', $context);
-        }
+        $data['date_create'] = $object->getDateCreate();
+        $data['id'] = $object->getId();
+        $data['is_active'] = $object->getIsActive();
+        $data['name'] = $object->getName();
+        $data['team'] = $this->normalizer->normalize($object->getTeam(), 'json', $context);
         return $data;
     }
 }

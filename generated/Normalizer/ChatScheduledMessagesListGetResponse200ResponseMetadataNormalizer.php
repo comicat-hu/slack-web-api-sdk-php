@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ChatScheduledMessagesListGetResponse200ResponseMetadataNormalizer implemen
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ChatScheduledMessagesListGetResponse200ResponseMetadata();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('next_cursor', $data)) {
             $object->setNextCursor($data['next_cursor']);
         }
@@ -41,9 +44,7 @@ class ChatScheduledMessagesListGetResponse200ResponseMetadataNormalizer implemen
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getNextCursor()) {
-            $data['next_cursor'] = $object->getNextCursor();
-        }
+        $data['next_cursor'] = $object->getNextCursor();
         return $data;
     }
 }

@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsConversationItem0DisplayCountsNormalizer implements DenormalizerInterf
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsConversationItem0DisplayCounts();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('display_counts', $data)) {
             $object->setDisplayCounts($data['display_counts']);
         }
@@ -44,12 +47,8 @@ class ObjsConversationItem0DisplayCountsNormalizer implements DenormalizerInterf
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getDisplayCounts()) {
-            $data['display_counts'] = $object->getDisplayCounts();
-        }
-        if (null !== $object->getGuestCounts()) {
-            $data['guest_counts'] = $object->getGuestCounts();
-        }
+        $data['display_counts'] = $object->getDisplayCounts();
+        $data['guest_counts'] = $object->getGuestCounts();
         return $data;
     }
 }

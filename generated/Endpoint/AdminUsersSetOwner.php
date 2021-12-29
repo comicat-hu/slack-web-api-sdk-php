@@ -2,14 +2,14 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AdminUsersSetOwner extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AdminUsersSetOwner extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Set an existing guest, regular user, or admin user to be a workspace owner.
      *
      * @param array $formParameters {
-     *     @var string $user_id Id of the user to promote to owner.
      *     @var string $team_id The ID (`T1234`) of the workspace.
+     *     @var string $user_id Id of the user to promote to owner.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `admin.users:write`
@@ -20,7 +20,7 @@ class AdminUsersSetOwner extends \Jane\OpenApiRuntime\Client\BaseEndpoint implem
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -40,11 +40,11 @@ class AdminUsersSetOwner extends \Jane\OpenApiRuntime\Client\BaseEndpoint implem
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('user_id', 'team_id'));
-        $optionsResolver->setRequired(array('user_id', 'team_id'));
+        $optionsResolver->setDefined(array('team_id', 'user_id'));
+        $optionsResolver->setRequired(array('team_id', 'user_id'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('user_id', array('string'));
         $optionsResolver->setAllowedTypes('team_id', array('string'));
+        $optionsResolver->setAllowedTypes('user_id', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -62,7 +62,7 @@ class AdminUsersSetOwner extends \Jane\OpenApiRuntime\Client\BaseEndpoint implem
      *
      * @return null|\Comicat\Slack\Api\Model\AdminUsersSetOwnerPostResponse200|\Comicat\Slack\Api\Model\AdminUsersSetOwnerPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AdminUsersSetOwnerPostResponse200', 'json');

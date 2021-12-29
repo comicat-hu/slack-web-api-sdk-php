@@ -2,14 +2,14 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AppsPermissionsRequest extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AppsPermissionsRequest extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Allows an app to request additional scopes
      *
      * @param array $queryParameters {
-     *     @var string $scopes A comma separated list of scopes to request for
      *     @var string $token Authentication token. Requires scope: `none`
+     *     @var string $scopes A comma separated list of scopes to request for
      *     @var string $trigger_id Token used to trigger the permissions API
      * }
      */
@@ -17,7 +17,7 @@ class AppsPermissionsRequest extends \Jane\OpenApiRuntime\Client\BaseEndpoint im
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -37,11 +37,11 @@ class AppsPermissionsRequest extends \Jane\OpenApiRuntime\Client\BaseEndpoint im
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('scopes', 'token', 'trigger_id'));
-        $optionsResolver->setRequired(array('scopes', 'token', 'trigger_id'));
+        $optionsResolver->setDefined(array('token', 'scopes', 'trigger_id'));
+        $optionsResolver->setRequired(array('token', 'scopes', 'trigger_id'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('scopes', array('string'));
         $optionsResolver->setAllowedTypes('token', array('string'));
+        $optionsResolver->setAllowedTypes('scopes', array('string'));
         $optionsResolver->setAllowedTypes('trigger_id', array('string'));
         return $optionsResolver;
     }
@@ -51,7 +51,7 @@ class AppsPermissionsRequest extends \Jane\OpenApiRuntime\Client\BaseEndpoint im
      *
      * @return null|\Comicat\Slack\Api\Model\AppsPermissionsRequestGetResponse200|\Comicat\Slack\Api\Model\AppsPermissionsRequestGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AppsPermissionsRequestGetResponse200', 'json');

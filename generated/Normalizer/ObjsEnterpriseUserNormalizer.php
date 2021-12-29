@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsEnterpriseUserNormalizer implements DenormalizerInterface, NormalizerI
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsEnterpriseUser();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('enterprise_id', $data)) {
             $object->setEnterpriseId($data['enterprise_id']);
         }
@@ -60,28 +63,16 @@ class ObjsEnterpriseUserNormalizer implements DenormalizerInterface, NormalizerI
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getEnterpriseId()) {
-            $data['enterprise_id'] = $object->getEnterpriseId();
+        $data['enterprise_id'] = $object->getEnterpriseId();
+        $data['enterprise_name'] = $object->getEnterpriseName();
+        $data['id'] = $object->getId();
+        $data['is_admin'] = $object->getIsAdmin();
+        $data['is_owner'] = $object->getIsOwner();
+        $values = array();
+        foreach ($object->getTeams() as $value) {
+            $values[] = $value;
         }
-        if (null !== $object->getEnterpriseName()) {
-            $data['enterprise_name'] = $object->getEnterpriseName();
-        }
-        if (null !== $object->getId()) {
-            $data['id'] = $object->getId();
-        }
-        if (null !== $object->getIsAdmin()) {
-            $data['is_admin'] = $object->getIsAdmin();
-        }
-        if (null !== $object->getIsOwner()) {
-            $data['is_owner'] = $object->getIsOwner();
-        }
-        if (null !== $object->getTeams()) {
-            $values = array();
-            foreach ($object->getTeams() as $value) {
-                $values[] = $value;
-            }
-            $data['teams'] = $values;
-        }
+        $data['teams'] = $values;
         return $data;
     }
 }

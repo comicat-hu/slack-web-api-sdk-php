@@ -7,6 +7,12 @@ class UsersProfileSetPostResponse200
     /**
      * 
      *
+     * @var string
+     */
+    protected $emailPending;
+    /**
+     * 
+     *
      * @var bool
      */
     protected $ok;
@@ -22,6 +28,27 @@ class UsersProfileSetPostResponse200
      * @var string
      */
     protected $username;
+    /**
+     * 
+     *
+     * @return string
+     */
+    public function getEmailPending() : string
+    {
+        return $this->emailPending;
+    }
+    /**
+     * 
+     *
+     * @param string $emailPending
+     *
+     * @return self
+     */
+    public function setEmailPending(string $emailPending) : self
+    {
+        $this->emailPending = $emailPending;
+        return $this;
+    }
     /**
      * 
      *

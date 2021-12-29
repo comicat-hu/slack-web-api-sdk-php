@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ReactionsListGetResponse200ItemsItemItem1Normalizer implements Denormalize
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ReactionsListGetResponse200ItemsItemItem1();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('file', $data)) {
             $object->setFile($this->denormalizer->denormalize($data['file'], 'Comicat\\Slack\\Api\\Model\\ObjsFile', 'json', $context));
         }
@@ -44,12 +47,8 @@ class ReactionsListGetResponse200ItemsItemItem1Normalizer implements Denormalize
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getFile()) {
-            $data['file'] = $this->normalizer->normalize($object->getFile(), 'json', $context);
-        }
-        if (null !== $object->getType()) {
-            $data['type'] = $object->getType();
-        }
+        $data['file'] = $this->normalizer->normalize($object->getFile(), 'json', $context);
+        $data['type'] = $object->getType();
         return $data;
     }
 }

@@ -2,22 +2,22 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AdminTeamsSettingsSetDefaultChannels extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AdminTeamsSettingsSetDefaultChannels extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Set the default channels of a workspace.
      *
      * @param array $formParameters {
-     *     @var string $channel_ids An array of channel IDs.
      *     @var string $token Authentication token. Requires scope: `admin.teams:write`
      *     @var string $team_id ID for the workspace to set the default channel for.
+     *     @var string $channel_ids An array of channel IDs.
      * }
      */
     public function __construct(array $formParameters = array())
     {
         $this->formParameters = $formParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -37,12 +37,12 @@ class AdminTeamsSettingsSetDefaultChannels extends \Jane\OpenApiRuntime\Client\B
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('channel_ids', 'token', 'team_id'));
-        $optionsResolver->setRequired(array('channel_ids', 'token', 'team_id'));
+        $optionsResolver->setDefined(array('token', 'team_id', 'channel_ids'));
+        $optionsResolver->setRequired(array('token', 'team_id', 'channel_ids'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('channel_ids', array('string'));
         $optionsResolver->setAllowedTypes('token', array('string'));
         $optionsResolver->setAllowedTypes('team_id', array('string'));
+        $optionsResolver->setAllowedTypes('channel_ids', array('string'));
         return $optionsResolver;
     }
     /**
@@ -51,7 +51,7 @@ class AdminTeamsSettingsSetDefaultChannels extends \Jane\OpenApiRuntime\Client\B
      *
      * @return null|\Comicat\Slack\Api\Model\AdminTeamsSettingsSetDefaultChannelsPostResponse200|\Comicat\Slack\Api\Model\AdminTeamsSettingsSetDefaultChannelsPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AdminTeamsSettingsSetDefaultChannelsPostResponse200', 'json');

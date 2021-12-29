@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class TeamInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class TeamInfo extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Gets information about the current team.
@@ -16,7 +16,7 @@ class TeamInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -49,7 +49,7 @@ class TeamInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane
      *
      * @return null|\Comicat\Slack\Api\Model\TeamInfoGetResponse200|\Comicat\Slack\Api\Model\TeamInfoGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\TeamInfoGetResponse200', 'json');

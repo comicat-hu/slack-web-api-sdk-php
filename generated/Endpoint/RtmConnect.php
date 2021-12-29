@@ -2,22 +2,22 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class RtmConnect extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class RtmConnect extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Starts a Real Time Messaging session.
      *
      * @param array $queryParameters {
-     *     @var bool $presence_sub Only deliver presence events when requested by subscription. See [presence subscriptions](/docs/presence-and-status#subscriptions).
      *     @var string $token Authentication token. Requires scope: `rtm:stream`
      *     @var bool $batch_presence_aware Batch presence deliveries via subscription. Enabling changes the shape of `presence_change` events. See [batch presence](/docs/presence-and-status#batching).
+     *     @var bool $presence_sub Only deliver presence events when requested by subscription. See [presence subscriptions](/docs/presence-and-status#subscriptions).
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -37,12 +37,12 @@ class RtmConnect extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('presence_sub', 'token', 'batch_presence_aware'));
+        $optionsResolver->setDefined(array('token', 'batch_presence_aware', 'presence_sub'));
         $optionsResolver->setRequired(array('token'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('presence_sub', array('bool'));
         $optionsResolver->setAllowedTypes('token', array('string'));
         $optionsResolver->setAllowedTypes('batch_presence_aware', array('bool'));
+        $optionsResolver->setAllowedTypes('presence_sub', array('bool'));
         return $optionsResolver;
     }
     /**
@@ -51,7 +51,7 @@ class RtmConnect extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
      *
      * @return null|\Comicat\Slack\Api\Model\RtmConnectGetResponse200|\Comicat\Slack\Api\Model\RtmConnectGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\RtmConnectGetResponse200', 'json');

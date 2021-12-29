@@ -2,14 +2,13 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ConversationsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ConversationsCreate extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Initiates a public or private channel-based conversation
      *
      * @param array $formParameters {
      *     @var string $name Name of the public or private channel to create
-     *     @var string $user_ids **Required** for workspace apps. A list of between 1 and 30 human users that will be added to the newly-created conversation. This argument has no effect when used by classic Slack apps.
      *     @var bool $is_private Create a private channel instead of a public one
      * }
      * @param array $headerParameters {
@@ -21,7 +20,7 @@ class ConversationsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint imple
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -41,11 +40,10 @@ class ConversationsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint imple
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('name', 'user_ids', 'is_private'));
+        $optionsResolver->setDefined(array('name', 'is_private'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('name', array('string'));
-        $optionsResolver->setAllowedTypes('user_ids', array('string'));
         $optionsResolver->setAllowedTypes('is_private', array('bool'));
         return $optionsResolver;
     }
@@ -64,7 +62,7 @@ class ConversationsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint imple
      *
      * @return null|\Comicat\Slack\Api\Model\ConversationsCreatePostResponse200|\Comicat\Slack\Api\Model\ConversationsCreatePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ConversationsCreatePostResponse200', 'json');

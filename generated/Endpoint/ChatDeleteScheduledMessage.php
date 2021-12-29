@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ChatDeleteScheduledMessage extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ChatDeleteScheduledMessage extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Deletes a pending scheduled message from the queue.
@@ -21,7 +21,7 @@ class ChatDeleteScheduledMessage extends \Jane\OpenApiRuntime\Client\BaseEndpoin
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -64,7 +64,7 @@ class ChatDeleteScheduledMessage extends \Jane\OpenApiRuntime\Client\BaseEndpoin
      *
      * @return null|\Comicat\Slack\Api\Model\ChatDeleteScheduledMessagePostResponse200|\Comicat\Slack\Api\Model\ChatDeleteScheduledMessagePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ChatDeleteScheduledMessagePostResponse200', 'json');

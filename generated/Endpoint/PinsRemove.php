@@ -2,16 +2,14 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class PinsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class PinsRemove extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Un-pins an item from a channel.
      *
      * @param array $formParameters {
-     *     @var string $file_comment File comment to un-pin.
-     *     @var float $timestamp Timestamp of the message to un-pin.
-     *     @var string $file File to un-pin.
      *     @var string $channel Channel where the item is pinned to.
+     *     @var string $timestamp Timestamp of the message to un-pin.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `pins:write`
@@ -22,7 +20,7 @@ class PinsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -42,20 +40,18 @@ class PinsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('file_comment', 'timestamp', 'file', 'channel'));
-        $optionsResolver->setRequired(array());
+        $optionsResolver->setDefined(array('channel', 'timestamp'));
+        $optionsResolver->setRequired(array('channel'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('file_comment', array('string'));
-        $optionsResolver->setAllowedTypes('timestamp', array('float'));
-        $optionsResolver->setAllowedTypes('file', array('string'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('timestamp', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getHeadersOptionsResolver();
         $optionsResolver->setDefined(array('token'));
-        $optionsResolver->setRequired(array());
+        $optionsResolver->setRequired(array('token'));
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('token', array('string'));
         return $optionsResolver;
@@ -66,7 +62,7 @@ class PinsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
      *
      * @return null|\Comicat\Slack\Api\Model\PinsRemovePostResponse200|\Comicat\Slack\Api\Model\PinsRemovePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\PinsRemovePostResponse200', 'json');

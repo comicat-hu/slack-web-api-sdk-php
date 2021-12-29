@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AdminEmojiRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AdminEmojiRemove extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Remove an emoji across an Enterprise Grid organization
@@ -16,7 +16,7 @@ class AdminEmojiRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
     {
         $this->formParameters = $formParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -49,7 +49,7 @@ class AdminEmojiRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
      *
      * @return null|\Comicat\Slack\Api\Model\AdminEmojiRemovePostResponse200|\Comicat\Slack\Api\Model\AdminEmojiRemovePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AdminEmojiRemovePostResponse200', 'json');

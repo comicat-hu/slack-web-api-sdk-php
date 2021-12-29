@@ -25,7 +25,7 @@ class ReactionsListGetResponse200
     /**
      * 
      *
-     * @var ObjsResponseMetadata
+     * @var mixed
      */
     protected $responseMetadata;
     /**
@@ -94,20 +94,20 @@ class ReactionsListGetResponse200
     /**
      * 
      *
-     * @return ObjsResponseMetadata
+     * @return mixed
      */
-    public function getResponseMetadata() : ObjsResponseMetadata
+    public function getResponseMetadata()
     {
         return $this->responseMetadata;
     }
     /**
      * 
      *
-     * @param ObjsResponseMetadata $responseMetadata
+     * @param mixed $responseMetadata
      *
      * @return self
      */
-    public function setResponseMetadata(ObjsResponseMetadata $responseMetadata) : self
+    public function setResponseMetadata($responseMetadata) : self
     {
         $this->responseMetadata = $responseMetadata;
         return $this;

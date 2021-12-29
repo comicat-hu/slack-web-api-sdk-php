@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,34 +33,28 @@ class DndTeamInfoGetResponsedefaultNormalizer implements DenormalizerInterface, 
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\DndTeamInfoGetResponsedefault();
-        if (\array_key_exists('error', $data)) {
-            $object->setError($data['error']);
-        }
-        if (\array_key_exists('needed', $data)) {
-            $object->setNeeded($data['needed']);
+        if (null === $data || false === \is_array($data)) {
+            return $object;
         }
         if (\array_key_exists('ok', $data)) {
             $object->setOk($data['ok']);
+            unset($data['ok']);
         }
-        if (\array_key_exists('provided', $data)) {
-            $object->setProvided($data['provided']);
+        foreach ($data as $key => $value) {
+            if (preg_match('/.*/', (string) $key)) {
+                $object[$key] = $value;
+            }
         }
         return $object;
     }
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getError()) {
-            $data['error'] = $object->getError();
-        }
-        if (null !== $object->getNeeded()) {
-            $data['needed'] = $object->getNeeded();
-        }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
-        if (null !== $object->getProvided()) {
-            $data['provided'] = $object->getProvided();
+        $data['ok'] = $object->getOk();
+        foreach ($object as $key => $value) {
+            if (preg_match('/.*/', (string) $key)) {
+                $data[$key] = $value;
+            }
         }
         return $data;
     }

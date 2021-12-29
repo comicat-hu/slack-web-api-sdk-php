@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ChatScheduledMessagesListGetResponse200ScheduledMessagesItemNormalizer imp
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ChatScheduledMessagesListGetResponse200ScheduledMessagesItem();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('channel_id', $data)) {
             $object->setChannelId($data['channel_id']);
         }
@@ -53,18 +56,10 @@ class ChatScheduledMessagesListGetResponse200ScheduledMessagesItemNormalizer imp
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getChannelId()) {
-            $data['channel_id'] = $object->getChannelId();
-        }
-        if (null !== $object->getDateCreated()) {
-            $data['date_created'] = $object->getDateCreated();
-        }
-        if (null !== $object->getId()) {
-            $data['id'] = $object->getId();
-        }
-        if (null !== $object->getPostAt()) {
-            $data['post_at'] = $object->getPostAt();
-        }
+        $data['channel_id'] = $object->getChannelId();
+        $data['date_created'] = $object->getDateCreated();
+        $data['id'] = $object->getId();
+        $data['post_at'] = $object->getPostAt();
         if (null !== $object->getText()) {
             $data['text'] = $object->getText();
         }

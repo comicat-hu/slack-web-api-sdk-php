@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class RemindersDelete extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class RemindersDelete extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Deletes a reminder.
@@ -19,7 +19,7 @@ class RemindersDelete extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -60,7 +60,7 @@ class RemindersDelete extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
      *
      * @return null|\Comicat\Slack\Api\Model\RemindersDeletePostResponse200|\Comicat\Slack\Api\Model\RemindersDeletePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\RemindersDeletePostResponse200', 'json');

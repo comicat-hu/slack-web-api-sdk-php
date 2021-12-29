@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class DndTeamInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class DndTeamInfo extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Retrieves the Do Not Disturb status for up to 50 users on a team.
@@ -16,7 +16,7 @@ class DndTeamInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \J
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -49,7 +49,7 @@ class DndTeamInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \J
      *
      * @return null|\Comicat\Slack\Api\Model\DndTeamInfoGetResponse200|\Comicat\Slack\Api\Model\DndTeamInfoGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\DndTeamInfoGetResponse200', 'json');

@@ -2,15 +2,15 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class RemindersAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class RemindersAdd extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Creates a reminder.
      *
      * @param array $formParameters {
      *     @var string $text The content of the reminder
-     *     @var string $user The user who will receive the reminder. If no user is specified, the reminder will go to user who created it.
      *     @var string $time When this reminder should happen: the Unix timestamp (up to five years from now), the number of seconds until the reminder (if within 24 hours), or a natural language description (Ex. "in 15 minutes," or "every Thursday")
+     *     @var string $user The user who will receive the reminder. If no user is specified, the reminder will go to user who created it.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `reminders:write`
@@ -21,7 +21,7 @@ class RemindersAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -41,19 +41,19 @@ class RemindersAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('text', 'user', 'time'));
-        $optionsResolver->setRequired(array());
+        $optionsResolver->setDefined(array('text', 'time', 'user'));
+        $optionsResolver->setRequired(array('text', 'time'));
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('text', array('string'));
-        $optionsResolver->setAllowedTypes('user', array('string'));
         $optionsResolver->setAllowedTypes('time', array('string'));
+        $optionsResolver->setAllowedTypes('user', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getHeadersOptionsResolver();
         $optionsResolver->setDefined(array('token'));
-        $optionsResolver->setRequired(array());
+        $optionsResolver->setRequired(array('token'));
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('token', array('string'));
         return $optionsResolver;
@@ -64,7 +64,7 @@ class RemindersAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \
      *
      * @return null|\Comicat\Slack\Api\Model\RemindersAddPostResponse200|\Comicat\Slack\Api\Model\RemindersAddPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\RemindersAddPostResponse200', 'json');

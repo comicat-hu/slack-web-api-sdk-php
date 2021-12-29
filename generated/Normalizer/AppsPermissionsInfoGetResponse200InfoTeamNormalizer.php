@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class AppsPermissionsInfoGetResponse200InfoTeamNormalizer implements Denormalize
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\AppsPermissionsInfoGetResponse200InfoTeam();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('resources', $data)) {
             $object->setResources($this->denormalizer->denormalize($data['resources'], 'Comicat\\Slack\\Api\\Model\\ObjsResources', 'json', $context));
         }
@@ -48,16 +51,12 @@ class AppsPermissionsInfoGetResponse200InfoTeamNormalizer implements Denormalize
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getResources()) {
-            $data['resources'] = $this->normalizer->normalize($object->getResources(), 'json', $context);
+        $data['resources'] = $this->normalizer->normalize($object->getResources(), 'json', $context);
+        $values = array();
+        foreach ($object->getScopes() as $value) {
+            $values[] = $value;
         }
-        if (null !== $object->getScopes()) {
-            $values = array();
-            foreach ($object->getScopes() as $value) {
-                $values[] = $value;
-            }
-            $data['scopes'] = $values;
-        }
+        $data['scopes'] = $values;
         return $data;
     }
 }

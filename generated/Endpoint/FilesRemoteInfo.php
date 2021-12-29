@@ -2,22 +2,22 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class FilesRemoteInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class FilesRemoteInfo extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Retrieve information about a remote file added to Slack
      *
      * @param array $queryParameters {
      *     @var string $token Authentication token. Requires scope: `remote_files:read`
-     *     @var string $external_id Creator defined GUID for the file.
      *     @var string $file Specify a file by providing its ID.
+     *     @var string $external_id Creator defined GUID for the file.
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -37,12 +37,12 @@ class FilesRemoteInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('token', 'external_id', 'file'));
+        $optionsResolver->setDefined(array('token', 'file', 'external_id'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('token', array('string'));
-        $optionsResolver->setAllowedTypes('external_id', array('string'));
         $optionsResolver->setAllowedTypes('file', array('string'));
+        $optionsResolver->setAllowedTypes('external_id', array('string'));
         return $optionsResolver;
     }
     /**
@@ -51,7 +51,7 @@ class FilesRemoteInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
      *
      * @return null|\Comicat\Slack\Api\Model\FilesRemoteInfoGetResponse200|\Comicat\Slack\Api\Model\FilesRemoteInfoGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\FilesRemoteInfoGetResponse200', 'json');

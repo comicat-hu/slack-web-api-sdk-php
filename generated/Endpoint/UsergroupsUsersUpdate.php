@@ -2,15 +2,15 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class UsergroupsUsersUpdate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class UsergroupsUsersUpdate extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Update the list of users for a User Group
      *
      * @param array $formParameters {
-     *     @var string $users A comma separated string of encoded user IDs that represent the entire list of users for the User Group.
      *     @var bool $include_count Include the number of users in the User Group.
      *     @var string $usergroup The encoded ID of the User Group to update.
+     *     @var string $users A comma separated string of encoded user IDs that represent the entire list of users for the User Group.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `usergroups:write`
@@ -21,7 +21,7 @@ class UsergroupsUsersUpdate extends \Jane\OpenApiRuntime\Client\BaseEndpoint imp
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -41,12 +41,12 @@ class UsergroupsUsersUpdate extends \Jane\OpenApiRuntime\Client\BaseEndpoint imp
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('users', 'include_count', 'usergroup'));
-        $optionsResolver->setRequired(array('users', 'usergroup'));
+        $optionsResolver->setDefined(array('include_count', 'usergroup', 'users'));
+        $optionsResolver->setRequired(array('usergroup', 'users'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('users', array('string'));
         $optionsResolver->setAllowedTypes('include_count', array('bool'));
         $optionsResolver->setAllowedTypes('usergroup', array('string'));
+        $optionsResolver->setAllowedTypes('users', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -64,7 +64,7 @@ class UsergroupsUsersUpdate extends \Jane\OpenApiRuntime\Client\BaseEndpoint imp
      *
      * @return null|\Comicat\Slack\Api\Model\UsergroupsUsersUpdatePostResponse200|\Comicat\Slack\Api\Model\UsergroupsUsersUpdatePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\UsergroupsUsersUpdatePostResponse200', 'json');

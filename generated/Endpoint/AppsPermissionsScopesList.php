@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AppsPermissionsScopesList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AppsPermissionsScopesList extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Returns list of scopes this app has on a team.
@@ -15,7 +15,7 @@ class AppsPermissionsScopesList extends \Jane\OpenApiRuntime\Client\BaseEndpoint
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -47,7 +47,7 @@ class AppsPermissionsScopesList extends \Jane\OpenApiRuntime\Client\BaseEndpoint
      *
      * @return null|\Comicat\Slack\Api\Model\AppsPermissionsScopesListGetResponse200|\Comicat\Slack\Api\Model\AppsPermissionsScopesListGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AppsPermissionsScopesListGetResponse200', 'json');

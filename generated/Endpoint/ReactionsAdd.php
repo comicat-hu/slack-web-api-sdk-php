@@ -2,15 +2,15 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ReactionsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ReactionsAdd extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Adds a reaction to an item.
      *
      * @param array $formParameters {
-     *     @var string $timestamp Timestamp of the message to add reaction to.
-     *     @var string $name Reaction (emoji) name.
      *     @var string $channel Channel where the message to add reaction to was posted.
+     *     @var string $name Reaction (emoji) name.
+     *     @var string $timestamp Timestamp of the message to add reaction to.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `reactions:write`
@@ -21,7 +21,7 @@ class ReactionsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -41,12 +41,12 @@ class ReactionsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('timestamp', 'name', 'channel'));
-        $optionsResolver->setRequired(array('timestamp', 'name', 'channel'));
+        $optionsResolver->setDefined(array('channel', 'name', 'timestamp'));
+        $optionsResolver->setRequired(array('channel', 'name', 'timestamp'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('timestamp', array('string'));
-        $optionsResolver->setAllowedTypes('name', array('string'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('name', array('string'));
+        $optionsResolver->setAllowedTypes('timestamp', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -64,7 +64,7 @@ class ReactionsAdd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \
      *
      * @return null|\Comicat\Slack\Api\Model\ReactionsAddPostResponse200|\Comicat\Slack\Api\Model\ReactionsAddPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ReactionsAddPostResponse200', 'json');

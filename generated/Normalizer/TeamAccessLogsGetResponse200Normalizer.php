@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class TeamAccessLogsGetResponse200Normalizer implements DenormalizerInterface, N
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\TeamAccessLogsGetResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('logins', $data)) {
             $values = array();
             foreach ($data['logins'] as $value) {
@@ -51,19 +54,13 @@ class TeamAccessLogsGetResponse200Normalizer implements DenormalizerInterface, N
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getLogins()) {
-            $values = array();
-            foreach ($object->getLogins() as $value) {
-                $values[] = $this->normalizer->normalize($value, 'json', $context);
-            }
-            $data['logins'] = $values;
+        $values = array();
+        foreach ($object->getLogins() as $value) {
+            $values[] = $this->normalizer->normalize($value, 'json', $context);
         }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
-        if (null !== $object->getPaging()) {
-            $data['paging'] = $this->normalizer->normalize($object->getPaging(), 'json', $context);
-        }
+        $data['logins'] = $values;
+        $data['ok'] = $object->getOk();
+        $data['paging'] = $this->normalizer->normalize($object->getPaging(), 'json', $context);
         return $data;
     }
 }

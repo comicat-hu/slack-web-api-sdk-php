@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,12 @@ class UsersProfileSetPostResponse200Normalizer implements DenormalizerInterface,
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\UsersProfileSetPostResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
+        if (\array_key_exists('email_pending', $data)) {
+            $object->setEmailPending($data['email_pending']);
+        }
         if (\array_key_exists('ok', $data)) {
             $object->setOk($data['ok']);
         }
@@ -47,15 +53,12 @@ class UsersProfileSetPostResponse200Normalizer implements DenormalizerInterface,
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
+        if (null !== $object->getEmailPending()) {
+            $data['email_pending'] = $object->getEmailPending();
         }
-        if (null !== $object->getProfile()) {
-            $data['profile'] = $this->normalizer->normalize($object->getProfile(), 'json', $context);
-        }
-        if (null !== $object->getUsername()) {
-            $data['username'] = $object->getUsername();
-        }
+        $data['ok'] = $object->getOk();
+        $data['profile'] = $this->normalizer->normalize($object->getProfile(), 'json', $context);
+        $data['username'] = $object->getUsername();
         return $data;
     }
 }

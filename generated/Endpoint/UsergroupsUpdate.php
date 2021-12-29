@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class UsergroupsUpdate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class UsergroupsUpdate extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Update an existing User Group
@@ -24,7 +24,7 @@ class UsergroupsUpdate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -70,7 +70,7 @@ class UsergroupsUpdate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
      *
      * @return null|\Comicat\Slack\Api\Model\UsergroupsUpdatePostResponse200|\Comicat\Slack\Api\Model\UsergroupsUpdatePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\UsergroupsUpdatePostResponse200', 'json');

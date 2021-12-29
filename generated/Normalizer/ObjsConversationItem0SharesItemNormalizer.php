@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsConversationItem0SharesItemNormalizer implements DenormalizerInterface
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsConversationItem0SharesItem();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('accepted_user', $data)) {
             $object->setAcceptedUser($data['accepted_user']);
         }
@@ -53,15 +56,9 @@ class ObjsConversationItem0SharesItemNormalizer implements DenormalizerInterface
         if (null !== $object->getAcceptedUser()) {
             $data['accepted_user'] = $object->getAcceptedUser();
         }
-        if (null !== $object->getIsActive()) {
-            $data['is_active'] = $object->getIsActive();
-        }
-        if (null !== $object->getTeam()) {
-            $data['team'] = $this->normalizer->normalize($object->getTeam(), 'json', $context);
-        }
-        if (null !== $object->getUser()) {
-            $data['user'] = $object->getUser();
-        }
+        $data['is_active'] = $object->getIsActive();
+        $data['team'] = $this->normalizer->normalize($object->getTeam(), 'json', $context);
+        $data['user'] = $object->getUser();
         return $data;
     }
 }

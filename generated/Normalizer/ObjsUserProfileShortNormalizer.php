@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsUserProfileShortNormalizer implements DenormalizerInterface, Normalize
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsUserProfileShort();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('avatar_hash', $data)) {
             $object->setAvatarHash($data['avatar_hash']);
         }
@@ -43,7 +46,11 @@ class ObjsUserProfileShortNormalizer implements DenormalizerInterface, Normalize
             $object->setDisplayNameNormalized($data['display_name_normalized']);
         }
         if (\array_key_exists('first_name', $data)) {
-            $object->setFirstName($data['first_name']);
+            $value = $data['first_name'];
+            if (is_string($data['first_name'])) {
+                $value = $data['first_name'];
+            }
+            $object->setFirstName($value);
         }
         if (\array_key_exists('image_72', $data)) {
             $object->setImage72($data['image_72']);
@@ -71,39 +78,25 @@ class ObjsUserProfileShortNormalizer implements DenormalizerInterface, Normalize
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getAvatarHash()) {
-            $data['avatar_hash'] = $object->getAvatarHash();
-        }
-        if (null !== $object->getDisplayName()) {
-            $data['display_name'] = $object->getDisplayName();
-        }
+        $data['avatar_hash'] = $object->getAvatarHash();
+        $data['display_name'] = $object->getDisplayName();
         if (null !== $object->getDisplayNameNormalized()) {
             $data['display_name_normalized'] = $object->getDisplayNameNormalized();
         }
-        if (null !== $object->getFirstName()) {
-            $data['first_name'] = $object->getFirstName();
+        $value = $object->getFirstName();
+        if (is_string($object->getFirstName())) {
+            $value = $object->getFirstName();
         }
-        if (null !== $object->getImage72()) {
-            $data['image_72'] = $object->getImage72();
-        }
-        if (null !== $object->getIsRestricted()) {
-            $data['is_restricted'] = $object->getIsRestricted();
-        }
-        if (null !== $object->getIsUltraRestricted()) {
-            $data['is_ultra_restricted'] = $object->getIsUltraRestricted();
-        }
-        if (null !== $object->getName()) {
-            $data['name'] = $object->getName();
-        }
-        if (null !== $object->getRealName()) {
-            $data['real_name'] = $object->getRealName();
-        }
+        $data['first_name'] = $value;
+        $data['image_72'] = $object->getImage72();
+        $data['is_restricted'] = $object->getIsRestricted();
+        $data['is_ultra_restricted'] = $object->getIsUltraRestricted();
+        $data['name'] = $object->getName();
+        $data['real_name'] = $object->getRealName();
         if (null !== $object->getRealNameNormalized()) {
             $data['real_name_normalized'] = $object->getRealNameNormalized();
         }
-        if (null !== $object->getTeam()) {
-            $data['team'] = $object->getTeam();
-        }
+        $data['team'] = $object->getTeam();
         return $data;
     }
 }

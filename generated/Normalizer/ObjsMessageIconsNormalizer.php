@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,8 +33,14 @@ class ObjsMessageIconsNormalizer implements DenormalizerInterface, NormalizerInt
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsMessageIcons();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('emoji', $data)) {
             $object->setEmoji($data['emoji']);
+        }
+        if (\array_key_exists('image_64', $data)) {
+            $object->setImage64($data['image_64']);
         }
         return $object;
     }
@@ -43,6 +49,9 @@ class ObjsMessageIconsNormalizer implements DenormalizerInterface, NormalizerInt
         $data = array();
         if (null !== $object->getEmoji()) {
             $data['emoji'] = $object->getEmoji();
+        }
+        if (null !== $object->getImage64()) {
+            $data['image_64'] = $object->getImage64();
         }
         return $data;
     }

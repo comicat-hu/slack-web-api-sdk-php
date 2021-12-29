@@ -2,22 +2,22 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ChatGetPermalink extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ChatGetPermalink extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Retrieve a permalink URL for a specific extant message
      *
      * @param array $queryParameters {
      *     @var string $token Authentication token. Requires scope: `none`
-     *     @var string $message_ts A message's `ts` value, uniquely identifying it within a channel
      *     @var string $channel The ID of the conversation or channel containing the message
+     *     @var string $message_ts A message's `ts` value, uniquely identifying it within a channel
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -37,12 +37,12 @@ class ChatGetPermalink extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('token', 'message_ts', 'channel'));
-        $optionsResolver->setRequired(array('token', 'message_ts', 'channel'));
+        $optionsResolver->setDefined(array('token', 'channel', 'message_ts'));
+        $optionsResolver->setRequired(array('token', 'channel', 'message_ts'));
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('token', array('string'));
-        $optionsResolver->setAllowedTypes('message_ts', array('string'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('message_ts', array('string'));
         return $optionsResolver;
     }
     /**
@@ -51,7 +51,7 @@ class ChatGetPermalink extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
      *
      * @return null|\Comicat\Slack\Api\Model\ChatGetPermalinkGetResponse200|\Comicat\Slack\Api\Model\ChatGetPermalinkGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ChatGetPermalinkGetResponse200', 'json');

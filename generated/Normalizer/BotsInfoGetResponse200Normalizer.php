@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class BotsInfoGetResponse200Normalizer implements DenormalizerInterface, Normali
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\BotsInfoGetResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('bot', $data)) {
             $object->setBot($this->denormalizer->denormalize($data['bot'], 'Comicat\\Slack\\Api\\Model\\BotsInfoGetResponse200Bot', 'json', $context));
         }
@@ -44,12 +47,8 @@ class BotsInfoGetResponse200Normalizer implements DenormalizerInterface, Normali
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getBot()) {
-            $data['bot'] = $this->normalizer->normalize($object->getBot(), 'json', $context);
-        }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
+        $data['bot'] = $this->normalizer->normalize($object->getBot(), 'json', $context);
+        $data['ok'] = $object->getOk();
         return $data;
     }
 }

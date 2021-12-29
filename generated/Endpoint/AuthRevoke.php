@@ -2,21 +2,21 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AuthRevoke extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AuthRevoke extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Revokes a token.
      *
      * @param array $queryParameters {
-     *     @var bool $test Setting this parameter to `1` triggers a _testing mode_ where the specified token will not actually be revoked.
      *     @var string $token Authentication token. Requires scope: `none`
+     *     @var bool $test Setting this parameter to `1` triggers a _testing mode_ where the specified token will not actually be revoked.
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -36,11 +36,11 @@ class AuthRevoke extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('test', 'token'));
+        $optionsResolver->setDefined(array('token', 'test'));
         $optionsResolver->setRequired(array('token'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('test', array('bool'));
         $optionsResolver->setAllowedTypes('token', array('string'));
+        $optionsResolver->setAllowedTypes('test', array('bool'));
         return $optionsResolver;
     }
     /**
@@ -49,7 +49,7 @@ class AuthRevoke extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
      *
      * @return null|\Comicat\Slack\Api\Model\AuthRevokeGetResponse200|\Comicat\Slack\Api\Model\AuthRevokeGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AuthRevokeGetResponse200', 'json');

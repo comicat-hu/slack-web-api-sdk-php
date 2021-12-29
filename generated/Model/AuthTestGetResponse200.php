@@ -7,6 +7,12 @@ class AuthTestGetResponse200
     /**
      * 
      *
+     * @var string
+     */
+    protected $botId;
+    /**
+     * 
+     *
      * @var bool
      */
     protected $isEnterpriseInstall;
@@ -46,6 +52,27 @@ class AuthTestGetResponse200
      * @var string
      */
     protected $userId;
+    /**
+     * 
+     *
+     * @return string
+     */
+    public function getBotId() : string
+    {
+        return $this->botId;
+    }
+    /**
+     * 
+     *
+     * @param string $botId
+     *
+     * @return self
+     */
+    public function setBotId(string $botId) : self
+    {
+        $this->botId = $botId;
+        return $this;
+    }
     /**
      * 
      *

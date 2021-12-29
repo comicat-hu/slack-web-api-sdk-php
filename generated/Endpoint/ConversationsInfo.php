@@ -2,23 +2,23 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ConversationsInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ConversationsInfo extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Retrieve information about a conversation.
      *
      * @param array $queryParameters {
-     *     @var bool $include_num_members Set to `true` to include the member count for the specified conversation. Defaults to `false`
      *     @var string $token Authentication token. Requires scope: `conversations:read`
      *     @var string $channel Conversation ID to learn more about
      *     @var bool $include_locale Set this to `true` to receive the locale for this conversation. Defaults to `false`
+     *     @var bool $include_num_members Set to `true` to include the member count for the specified conversation. Defaults to `false`
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -38,13 +38,13 @@ class ConversationsInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint impleme
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('include_num_members', 'token', 'channel', 'include_locale'));
+        $optionsResolver->setDefined(array('token', 'channel', 'include_locale', 'include_num_members'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('include_num_members', array('bool'));
         $optionsResolver->setAllowedTypes('token', array('string'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
         $optionsResolver->setAllowedTypes('include_locale', array('bool'));
+        $optionsResolver->setAllowedTypes('include_num_members', array('bool'));
         return $optionsResolver;
     }
     /**
@@ -53,7 +53,7 @@ class ConversationsInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint impleme
      *
      * @return null|\Comicat\Slack\Api\Model\ConversationsInfoGetResponse200|\Comicat\Slack\Api\Model\ConversationsInfoGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ConversationsInfoGetResponse200', 'json');

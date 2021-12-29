@@ -5,6 +5,12 @@ namespace Comicat\Slack\Api\Model;
 class ConversationsSetTopicPostResponsedefault
 {
     /**
+     * Note: PHP callstack is only visible in dev/qa
+     *
+     * @var string
+     */
+    protected $callstack;
+    /**
      * 
      *
      * @var string
@@ -28,6 +34,27 @@ class ConversationsSetTopicPostResponsedefault
      * @var string
      */
     protected $provided;
+    /**
+     * Note: PHP callstack is only visible in dev/qa
+     *
+     * @return string
+     */
+    public function getCallstack() : string
+    {
+        return $this->callstack;
+    }
+    /**
+     * Note: PHP callstack is only visible in dev/qa
+     *
+     * @param string $callstack
+     *
+     * @return self
+     */
+    public function setCallstack(string $callstack) : self
+    {
+        $this->callstack = $callstack;
+        return $this;
+    }
     /**
      * 
      *

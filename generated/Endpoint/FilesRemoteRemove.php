@@ -2,22 +2,22 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class FilesRemoteRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class FilesRemoteRemove extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Remove a remote file.
      *
      * @param array $formParameters {
      *     @var string $token Authentication token. Requires scope: `remote_files:write`
-     *     @var string $external_id Creator defined GUID for the file.
      *     @var string $file Specify a file by providing its ID.
+     *     @var string $external_id Creator defined GUID for the file.
      * }
      */
     public function __construct(array $formParameters = array())
     {
         $this->formParameters = $formParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -37,12 +37,12 @@ class FilesRemoteRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint impleme
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('token', 'external_id', 'file'));
+        $optionsResolver->setDefined(array('token', 'file', 'external_id'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('token', array('string'));
-        $optionsResolver->setAllowedTypes('external_id', array('string'));
         $optionsResolver->setAllowedTypes('file', array('string'));
+        $optionsResolver->setAllowedTypes('external_id', array('string'));
         return $optionsResolver;
     }
     /**
@@ -51,7 +51,7 @@ class FilesRemoteRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint impleme
      *
      * @return null|\Comicat\Slack\Api\Model\FilesRemoteRemovePostResponse200|\Comicat\Slack\Api\Model\FilesRemoteRemovePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\FilesRemoteRemovePostResponse200', 'json');

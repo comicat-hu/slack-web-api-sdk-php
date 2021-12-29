@@ -2,41 +2,14 @@
 
 namespace Comicat\Slack\Api\Model;
 
-class TeamBillableInfoGetResponsedefault
+class TeamBillableInfoGetResponsedefault extends \ArrayObject
 {
-    /**
-     * 
-     *
-     * @var string
-     */
-    protected $error;
     /**
      * 
      *
      * @var bool
      */
     protected $ok;
-    /**
-     * 
-     *
-     * @return string
-     */
-    public function getError() : string
-    {
-        return $this->error;
-    }
-    /**
-     * 
-     *
-     * @param string $error
-     *
-     * @return self
-     */
-    public function setError(string $error) : self
-    {
-        $this->error = $error;
-        return $this;
-    }
     /**
      * 
      *

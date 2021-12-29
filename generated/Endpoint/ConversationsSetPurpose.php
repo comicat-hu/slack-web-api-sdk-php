@@ -2,14 +2,14 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ConversationsSetPurpose extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ConversationsSetPurpose extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Sets the purpose for a conversation.
      *
      * @param array $formParameters {
-     *     @var string $purpose A new, specialer purpose
      *     @var string $channel Conversation to set the purpose of
+     *     @var string $purpose A new, specialer purpose
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `conversations:write`
@@ -20,7 +20,7 @@ class ConversationsSetPurpose extends \Jane\OpenApiRuntime\Client\BaseEndpoint i
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -40,11 +40,11 @@ class ConversationsSetPurpose extends \Jane\OpenApiRuntime\Client\BaseEndpoint i
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('purpose', 'channel'));
+        $optionsResolver->setDefined(array('channel', 'purpose'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('purpose', array('string'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('purpose', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -62,7 +62,7 @@ class ConversationsSetPurpose extends \Jane\OpenApiRuntime\Client\BaseEndpoint i
      *
      * @return null|\Comicat\Slack\Api\Model\ConversationsSetPurposePostResponse200|\Comicat\Slack\Api\Model\ConversationsSetPurposePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ConversationsSetPurposePostResponse200', 'json');

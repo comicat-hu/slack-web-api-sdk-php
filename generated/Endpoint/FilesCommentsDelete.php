@@ -2,14 +2,14 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class FilesCommentsDelete extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class FilesCommentsDelete extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Deletes an existing comment on a file.
      *
      * @param array $formParameters {
-     *     @var string $id The comment to delete.
      *     @var string $file File to delete a comment from.
+     *     @var string $id The comment to delete.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `files:write:user`
@@ -20,7 +20,7 @@ class FilesCommentsDelete extends \Jane\OpenApiRuntime\Client\BaseEndpoint imple
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -40,11 +40,11 @@ class FilesCommentsDelete extends \Jane\OpenApiRuntime\Client\BaseEndpoint imple
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('id', 'file'));
+        $optionsResolver->setDefined(array('file', 'id'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('id', array('string'));
         $optionsResolver->setAllowedTypes('file', array('string'));
+        $optionsResolver->setAllowedTypes('id', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -62,7 +62,7 @@ class FilesCommentsDelete extends \Jane\OpenApiRuntime\Client\BaseEndpoint imple
      *
      * @return null|\Comicat\Slack\Api\Model\FilesCommentsDeletePostResponse200|\Comicat\Slack\Api\Model\FilesCommentsDeletePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\FilesCommentsDeletePostResponse200', 'json');

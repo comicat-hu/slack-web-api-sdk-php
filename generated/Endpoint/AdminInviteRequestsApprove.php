@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AdminInviteRequestsApprove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AdminInviteRequestsApprove extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Approve a workspace invite request.
@@ -20,7 +20,7 @@ class AdminInviteRequestsApprove extends \Jane\OpenApiRuntime\Client\BaseEndpoin
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -62,7 +62,7 @@ class AdminInviteRequestsApprove extends \Jane\OpenApiRuntime\Client\BaseEndpoin
      *
      * @return null|\Comicat\Slack\Api\Model\AdminInviteRequestsApprovePostResponse200|\Comicat\Slack\Api\Model\AdminInviteRequestsApprovePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AdminInviteRequestsApprovePostResponse200', 'json');

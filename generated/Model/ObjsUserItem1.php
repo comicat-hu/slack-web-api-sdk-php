@@ -63,6 +63,12 @@ class ObjsUserItem1
      *
      * @var bool
      */
+    protected $isForgotten;
+    /**
+     * 
+     *
+     * @var bool
+     */
     protected $isOwner;
     /**
      * 
@@ -76,6 +82,12 @@ class ObjsUserItem1
      * @var bool
      */
     protected $isRestricted;
+    /**
+     * 
+     *
+     * @var bool
+     */
+    protected $isStranger;
     /**
      * 
      *
@@ -354,6 +366,27 @@ class ObjsUserItem1
      *
      * @return bool
      */
+    public function getIsForgotten() : bool
+    {
+        return $this->isForgotten;
+    }
+    /**
+     * 
+     *
+     * @param bool $isForgotten
+     *
+     * @return self
+     */
+    public function setIsForgotten(bool $isForgotten) : self
+    {
+        $this->isForgotten = $isForgotten;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return bool
+     */
     public function getIsOwner() : bool
     {
         return $this->isOwner;
@@ -410,6 +443,27 @@ class ObjsUserItem1
     public function setIsRestricted(bool $isRestricted) : self
     {
         $this->isRestricted = $isRestricted;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return bool
+     */
+    public function getIsStranger() : bool
+    {
+        return $this->isStranger;
+    }
+    /**
+     * 
+     *
+     * @param bool $isStranger
+     *
+     * @return self
+     */
+    public function setIsStranger(bool $isStranger) : self
+    {
+        $this->isStranger = $isStranger;
         return $this;
     }
     /**

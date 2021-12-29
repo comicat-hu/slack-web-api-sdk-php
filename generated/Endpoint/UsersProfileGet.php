@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class UsersProfileGet extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class UsersProfileGet extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Retrieves a user's profile information.
@@ -17,7 +17,7 @@ class UsersProfileGet extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -38,7 +38,7 @@ class UsersProfileGet extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
     {
         $optionsResolver = parent::getQueryOptionsResolver();
         $optionsResolver->setDefined(array('token', 'include_labels', 'user'));
-        $optionsResolver->setRequired(array());
+        $optionsResolver->setRequired(array('token'));
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('token', array('string'));
         $optionsResolver->setAllowedTypes('include_labels', array('bool'));
@@ -51,7 +51,7 @@ class UsersProfileGet extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
      *
      * @return null|\Comicat\Slack\Api\Model\UsersProfileGetGetResponse200|\Comicat\Slack\Api\Model\UsersProfileGetGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\UsersProfileGetGetResponse200', 'json');

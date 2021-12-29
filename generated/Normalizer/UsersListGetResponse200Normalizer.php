@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class UsersListGetResponse200Normalizer implements DenormalizerInterface, Normal
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\UsersListGetResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('cache_ts', $data)) {
             $object->setCacheTs($data['cache_ts']);
         }
@@ -47,28 +50,22 @@ class UsersListGetResponse200Normalizer implements DenormalizerInterface, Normal
             $object->setOk($data['ok']);
         }
         if (\array_key_exists('response_metadata', $data)) {
-            $object->setResponseMetadata($this->denormalizer->denormalize($data['response_metadata'], 'Comicat\\Slack\\Api\\Model\\ObjsResponseMetadata', 'json', $context));
+            $object->setResponseMetadata($data['response_metadata']);
         }
         return $object;
     }
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getCacheTs()) {
-            $data['cache_ts'] = $object->getCacheTs();
+        $data['cache_ts'] = $object->getCacheTs();
+        $values = array();
+        foreach ($object->getMembers() as $value) {
+            $values[] = $value;
         }
-        if (null !== $object->getMembers()) {
-            $values = array();
-            foreach ($object->getMembers() as $value) {
-                $values[] = $value;
-            }
-            $data['members'] = $values;
-        }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
+        $data['members'] = $values;
+        $data['ok'] = $object->getOk();
         if (null !== $object->getResponseMetadata()) {
-            $data['response_metadata'] = $this->normalizer->normalize($object->getResponseMetadata(), 'json', $context);
+            $data['response_metadata'] = $object->getResponseMetadata();
         }
         return $data;
     }

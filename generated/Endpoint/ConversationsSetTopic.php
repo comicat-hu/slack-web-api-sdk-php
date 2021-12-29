@@ -2,14 +2,14 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ConversationsSetTopic extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ConversationsSetTopic extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Sets the topic for a conversation.
      *
      * @param array $formParameters {
-     *     @var string $topic The new topic string. Does not support formatting or linkification.
      *     @var string $channel Conversation to set the topic of
+     *     @var string $topic The new topic string. Does not support formatting or linkification.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `conversations:write`
@@ -20,7 +20,7 @@ class ConversationsSetTopic extends \Jane\OpenApiRuntime\Client\BaseEndpoint imp
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -40,11 +40,11 @@ class ConversationsSetTopic extends \Jane\OpenApiRuntime\Client\BaseEndpoint imp
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('topic', 'channel'));
+        $optionsResolver->setDefined(array('channel', 'topic'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('topic', array('string'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('topic', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -62,7 +62,7 @@ class ConversationsSetTopic extends \Jane\OpenApiRuntime\Client\BaseEndpoint imp
      *
      * @return null|\Comicat\Slack\Api\Model\ConversationsSetTopicPostResponse200|\Comicat\Slack\Api\Model\ConversationsSetTopicPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ConversationsSetTopicPostResponse200', 'json');

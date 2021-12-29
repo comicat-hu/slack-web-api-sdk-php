@@ -2,25 +2,25 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class FilesRemoteList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class FilesRemoteList extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Retrieve information about a remote file added to Slack
      *
      * @param array $queryParameters {
-     *     @var float $ts_to Filter files created before this timestamp (inclusive).
-     *     @var string $cursor Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request's `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](/docs/pagination) for more detail.
-     *     @var float $ts_from Filter files created after this timestamp (inclusive).
      *     @var string $token Authentication token. Requires scope: `remote_files:read`
-     *     @var int $limit The maximum number of items to return.
      *     @var string $channel Filter files appearing in a specific channel, indicated by its ID.
+     *     @var float $ts_from Filter files created after this timestamp (inclusive).
+     *     @var float $ts_to Filter files created before this timestamp (inclusive).
+     *     @var int $limit The maximum number of items to return.
+     *     @var string $cursor Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request's `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](/docs/pagination) for more detail.
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -40,15 +40,15 @@ class FilesRemoteList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('ts_to', 'cursor', 'ts_from', 'token', 'limit', 'channel'));
+        $optionsResolver->setDefined(array('token', 'channel', 'ts_from', 'ts_to', 'limit', 'cursor'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('ts_to', array('float'));
-        $optionsResolver->setAllowedTypes('cursor', array('string'));
-        $optionsResolver->setAllowedTypes('ts_from', array('float'));
         $optionsResolver->setAllowedTypes('token', array('string'));
-        $optionsResolver->setAllowedTypes('limit', array('int'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('ts_from', array('float'));
+        $optionsResolver->setAllowedTypes('ts_to', array('float'));
+        $optionsResolver->setAllowedTypes('limit', array('int'));
+        $optionsResolver->setAllowedTypes('cursor', array('string'));
         return $optionsResolver;
     }
     /**
@@ -57,7 +57,7 @@ class FilesRemoteList extends \Jane\OpenApiRuntime\Client\BaseEndpoint implement
      *
      * @return null|\Comicat\Slack\Api\Model\FilesRemoteListGetResponse200|\Comicat\Slack\Api\Model\FilesRemoteListGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\FilesRemoteListGetResponse200', 'json');

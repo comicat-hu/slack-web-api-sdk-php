@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,28 +33,28 @@ class UsersSetActivePostResponsedefaultNormalizer implements DenormalizerInterfa
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\UsersSetActivePostResponsedefault();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
+        if (\array_key_exists('callstack', $data)) {
+            $object->setCallstack($data['callstack']);
+        }
+        if (\array_key_exists('error', $data)) {
+            $object->setError($data['error']);
+        }
         if (\array_key_exists('ok', $data)) {
             $object->setOk($data['ok']);
-            unset($data['ok']);
-        }
-        foreach ($data as $key => $value) {
-            if (preg_match('/.*/', (string) $key)) {
-                $object[$key] = $value;
-            }
         }
         return $object;
     }
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
+        if (null !== $object->getCallstack()) {
+            $data['callstack'] = $object->getCallstack();
         }
-        foreach ($object as $key => $value) {
-            if (preg_match('/.*/', (string) $key)) {
-                $data[$key] = $value;
-            }
-        }
+        $data['error'] = $object->getError();
+        $data['ok'] = $object->getOk();
         return $data;
     }
 }

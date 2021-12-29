@@ -2,25 +2,25 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class FilesInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class FilesInfo extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
-     * Gets information about a team file.
+     * Gets information about a file.
      *
      * @param array $queryParameters {
-     *     @var string $count 
-     *     @var string $cursor Parameter for pagination. File comments are paginated for a single file. Set `cursor` equal to the `next_cursor` attribute returned by the previous request's `response_metadata`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection of comments. See [pagination](/docs/pagination) for more details.
      *     @var string $token Authentication token. Requires scope: `files:read`
-     *     @var int $limit The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached.
      *     @var string $file Specify a file by providing its ID.
+     *     @var string $count 
      *     @var string $page 
+     *     @var int $limit The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached.
+     *     @var string $cursor Parameter for pagination. File comments are paginated for a single file. Set `cursor` equal to the `next_cursor` attribute returned by the previous request's `response_metadata`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection of comments. See [pagination](/docs/pagination) for more details.
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -40,15 +40,15 @@ class FilesInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jan
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('count', 'cursor', 'token', 'limit', 'file', 'page'));
+        $optionsResolver->setDefined(array('token', 'file', 'count', 'page', 'limit', 'cursor'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('count', array('string'));
-        $optionsResolver->setAllowedTypes('cursor', array('string'));
         $optionsResolver->setAllowedTypes('token', array('string'));
-        $optionsResolver->setAllowedTypes('limit', array('int'));
         $optionsResolver->setAllowedTypes('file', array('string'));
+        $optionsResolver->setAllowedTypes('count', array('string'));
         $optionsResolver->setAllowedTypes('page', array('string'));
+        $optionsResolver->setAllowedTypes('limit', array('int'));
+        $optionsResolver->setAllowedTypes('cursor', array('string'));
         return $optionsResolver;
     }
     /**
@@ -57,7 +57,7 @@ class FilesInfo extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jan
      *
      * @return null|\Comicat\Slack\Api\Model\FilesInfoGetResponse200|\Comicat\Slack\Api\Model\FilesInfoGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\FilesInfoGetResponse200', 'json');

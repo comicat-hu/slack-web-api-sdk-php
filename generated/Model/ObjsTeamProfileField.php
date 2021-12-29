@@ -37,7 +37,7 @@ class ObjsTeamProfileField
     /**
      * 
      *
-     * @var string[]
+     * @var mixed
      */
     protected $options;
     /**
@@ -166,20 +166,20 @@ class ObjsTeamProfileField
     /**
      * 
      *
-     * @return string[]
+     * @return mixed
      */
-    public function getOptions() : array
+    public function getOptions()
     {
         return $this->options;
     }
     /**
      * 
      *
-     * @param string[] $options
+     * @param mixed $options
      *
      * @return self
      */
-    public function setOptions(array $options) : self
+    public function setOptions($options) : self
     {
         $this->options = $options;
         return $this;

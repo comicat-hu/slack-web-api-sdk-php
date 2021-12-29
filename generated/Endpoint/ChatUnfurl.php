@@ -2,18 +2,18 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ChatUnfurl extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ChatUnfurl extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Provide custom unfurl behavior for user-posted URLs
      *
      * @param array $formParameters {
+     *     @var string $channel Channel ID of the message
+     *     @var string $ts Timestamp of the message to add unfurl behavior to.
+     *     @var string $unfurls URL-encoded JSON map with keys set to URLs featured in the the message, pointing to their unfurl blocks or message attachments.
      *     @var string $user_auth_message Provide a simply-formatted string to send as an ephemeral message to the user as invitation to authenticate further and enable full unfurling behavior
      *     @var bool $user_auth_required Set to `true` or `1` to indicate the user must install your Slack app to trigger unfurls for this domain
-     *     @var string $unfurls URL-encoded JSON map with keys set to URLs featured in the the message, pointing to their unfurl blocks or message attachments.
-     *     @var string $ts Timestamp of the message to add unfurl behavior to.
      *     @var string $user_auth_url Send users to this custom URL where they will complete authentication in your app to fully trigger unfurling. Value should be properly URL-encoded.
-     *     @var string $channel Channel ID of the message
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `links:write`
@@ -24,7 +24,7 @@ class ChatUnfurl extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -44,15 +44,15 @@ class ChatUnfurl extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('user_auth_message', 'user_auth_required', 'unfurls', 'ts', 'user_auth_url', 'channel'));
-        $optionsResolver->setRequired(array('ts', 'channel'));
+        $optionsResolver->setDefined(array('channel', 'ts', 'unfurls', 'user_auth_message', 'user_auth_required', 'user_auth_url'));
+        $optionsResolver->setRequired(array('channel', 'ts'));
         $optionsResolver->setDefaults(array());
+        $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('ts', array('string'));
+        $optionsResolver->setAllowedTypes('unfurls', array('string'));
         $optionsResolver->setAllowedTypes('user_auth_message', array('string'));
         $optionsResolver->setAllowedTypes('user_auth_required', array('bool'));
-        $optionsResolver->setAllowedTypes('unfurls', array('string'));
-        $optionsResolver->setAllowedTypes('ts', array('string'));
         $optionsResolver->setAllowedTypes('user_auth_url', array('string'));
-        $optionsResolver->setAllowedTypes('channel', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -70,7 +70,7 @@ class ChatUnfurl extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Ja
      *
      * @return null|\Comicat\Slack\Api\Model\ChatUnfurlPostResponse200|\Comicat\Slack\Api\Model\ChatUnfurlPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ChatUnfurlPostResponse200', 'json');

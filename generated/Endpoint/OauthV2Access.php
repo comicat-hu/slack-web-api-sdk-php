@@ -2,15 +2,15 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class OauthV2Access extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class OauthV2Access extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Exchanges a temporary OAuth verifier code for an access token.
      *
      * @param array $queryParameters {
+     *     @var string $client_id Issued when you created your application.
      *     @var string $client_secret Issued when you created your application.
      *     @var string $code The `code` param returned via the OAuth callback.
-     *     @var string $client_id Issued when you created your application.
      *     @var string $redirect_uri This must match the originally submitted URI (if one was sent).
      * }
      */
@@ -18,7 +18,7 @@ class OauthV2Access extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements 
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -38,12 +38,12 @@ class OauthV2Access extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements 
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('client_secret', 'code', 'client_id', 'redirect_uri'));
+        $optionsResolver->setDefined(array('client_id', 'client_secret', 'code', 'redirect_uri'));
         $optionsResolver->setRequired(array('code'));
         $optionsResolver->setDefaults(array());
+        $optionsResolver->setAllowedTypes('client_id', array('string'));
         $optionsResolver->setAllowedTypes('client_secret', array('string'));
         $optionsResolver->setAllowedTypes('code', array('string'));
-        $optionsResolver->setAllowedTypes('client_id', array('string'));
         $optionsResolver->setAllowedTypes('redirect_uri', array('string'));
         return $optionsResolver;
     }
@@ -53,7 +53,7 @@ class OauthV2Access extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements 
      *
      * @return null|\Comicat\Slack\Api\Model\OauthV2AccessGetResponse200|\Comicat\Slack\Api\Model\OauthV2AccessGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\OauthV2AccessGetResponse200', 'json');

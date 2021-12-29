@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsBotProfileNormalizer implements DenormalizerInterface, NormalizerInter
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsBotProfile();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('app_id', $data)) {
             $object->setAppId($data['app_id']);
         }
@@ -59,27 +62,13 @@ class ObjsBotProfileNormalizer implements DenormalizerInterface, NormalizerInter
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getAppId()) {
-            $data['app_id'] = $object->getAppId();
-        }
-        if (null !== $object->getDeleted()) {
-            $data['deleted'] = $object->getDeleted();
-        }
-        if (null !== $object->getIcons()) {
-            $data['icons'] = $this->normalizer->normalize($object->getIcons(), 'json', $context);
-        }
-        if (null !== $object->getId()) {
-            $data['id'] = $object->getId();
-        }
-        if (null !== $object->getName()) {
-            $data['name'] = $object->getName();
-        }
-        if (null !== $object->getTeamId()) {
-            $data['team_id'] = $object->getTeamId();
-        }
-        if (null !== $object->getUpdated()) {
-            $data['updated'] = $object->getUpdated();
-        }
+        $data['app_id'] = $object->getAppId();
+        $data['deleted'] = $object->getDeleted();
+        $data['icons'] = $this->normalizer->normalize($object->getIcons(), 'json', $context);
+        $data['id'] = $object->getId();
+        $data['name'] = $object->getName();
+        $data['team_id'] = $object->getTeamId();
+        $data['updated'] = $object->getUpdated();
         return $data;
     }
 }

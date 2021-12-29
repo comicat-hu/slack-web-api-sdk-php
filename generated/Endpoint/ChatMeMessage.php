@@ -2,17 +2,17 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ChatMeMessage extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ChatMeMessage extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Share a me message into a channel.
      *
      * @param array $formParameters {
-     *     @var string $text Text of the message to send.
      *     @var string $channel Channel to send message to. Can be a public channel, private group or IM channel. Can be an encoded ID, or a name.
+     *     @var string $text Text of the message to send.
      * }
      * @param array $headerParameters {
-     *     @var string $token Authentication token. Requires scope: `chat:write:user`
+     *     @var string $token Authentication token. Requires scope: `chat:write`
      * }
      */
     public function __construct(array $formParameters = array(), array $headerParameters = array())
@@ -20,7 +20,7 @@ class ChatMeMessage extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements 
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -40,11 +40,11 @@ class ChatMeMessage extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements 
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('text', 'channel'));
+        $optionsResolver->setDefined(array('channel', 'text'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('text', array('string'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('text', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -62,7 +62,7 @@ class ChatMeMessage extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements 
      *
      * @return null|\Comicat\Slack\Api\Model\ChatMeMessagePostResponse200|\Comicat\Slack\Api\Model\ChatMeMessagePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ChatMeMessagePostResponse200', 'json');

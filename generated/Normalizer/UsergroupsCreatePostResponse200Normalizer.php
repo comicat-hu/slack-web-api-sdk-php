@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class UsergroupsCreatePostResponse200Normalizer implements DenormalizerInterface
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\UsergroupsCreatePostResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('ok', $data)) {
             $object->setOk($data['ok']);
         }
@@ -44,12 +47,8 @@ class UsergroupsCreatePostResponse200Normalizer implements DenormalizerInterface
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
-        if (null !== $object->getUsergroup()) {
-            $data['usergroup'] = $this->normalizer->normalize($object->getUsergroup(), 'json', $context);
-        }
+        $data['ok'] = $object->getOk();
+        $data['usergroup'] = $this->normalizer->normalize($object->getUsergroup(), 'json', $context);
         return $data;
     }
 }

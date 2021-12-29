@@ -11,9 +11,9 @@ class ChatUpdatePostResponse200Message
      */
     protected $attachments;
     /**
-     * This is a very loose definition, in the future, we'll populate this with deeper schema in this definition namespace.
+     * 
      *
-     * @var BlocksItem[]
+     * @var mixed
      */
     protected $blocks;
     /**
@@ -44,22 +44,22 @@ class ChatUpdatePostResponse200Message
         return $this;
     }
     /**
-     * This is a very loose definition, in the future, we'll populate this with deeper schema in this definition namespace.
+     * 
      *
-     * @return BlocksItem[]
+     * @return mixed
      */
-    public function getBlocks() : array
+    public function getBlocks()
     {
         return $this->blocks;
     }
     /**
-     * This is a very loose definition, in the future, we'll populate this with deeper schema in this definition namespace.
+     * 
      *
-     * @param BlocksItem[] $blocks
+     * @param mixed $blocks
      *
      * @return self
      */
-    public function setBlocks(array $blocks) : self
+    public function setBlocks($blocks) : self
     {
         $this->blocks = $blocks;
         return $this;

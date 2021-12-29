@@ -2,22 +2,22 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AppsUninstall extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AppsUninstall extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Uninstalls your app from a workspace.
      *
      * @param array $queryParameters {
-     *     @var string $client_secret Issued when you created your application.
      *     @var string $token Authentication token. Requires scope: `none`
      *     @var string $client_id Issued when you created your application.
+     *     @var string $client_secret Issued when you created your application.
      * }
      */
     public function __construct(array $queryParameters = array())
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'GET';
@@ -37,12 +37,12 @@ class AppsUninstall extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements 
     protected function getQueryOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(array('client_secret', 'token', 'client_id'));
+        $optionsResolver->setDefined(array('token', 'client_id', 'client_secret'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('client_secret', array('string'));
         $optionsResolver->setAllowedTypes('token', array('string'));
         $optionsResolver->setAllowedTypes('client_id', array('string'));
+        $optionsResolver->setAllowedTypes('client_secret', array('string'));
         return $optionsResolver;
     }
     /**
@@ -51,7 +51,7 @@ class AppsUninstall extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements 
      *
      * @return null|\Comicat\Slack\Api\Model\AppsUninstallGetResponse200|\Comicat\Slack\Api\Model\AppsUninstallGetResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AppsUninstallGetResponse200', 'json');

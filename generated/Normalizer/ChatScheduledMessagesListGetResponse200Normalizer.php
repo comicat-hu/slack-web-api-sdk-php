@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ChatScheduledMessagesListGetResponse200Normalizer implements DenormalizerI
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ChatScheduledMessagesListGetResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('ok', $data)) {
             $object->setOk($data['ok']);
         }
@@ -51,19 +54,13 @@ class ChatScheduledMessagesListGetResponse200Normalizer implements DenormalizerI
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
+        $data['ok'] = $object->getOk();
+        $data['response_metadata'] = $this->normalizer->normalize($object->getResponseMetadata(), 'json', $context);
+        $values = array();
+        foreach ($object->getScheduledMessages() as $value) {
+            $values[] = $this->normalizer->normalize($value, 'json', $context);
         }
-        if (null !== $object->getResponseMetadata()) {
-            $data['response_metadata'] = $this->normalizer->normalize($object->getResponseMetadata(), 'json', $context);
-        }
-        if (null !== $object->getScheduledMessages()) {
-            $values = array();
-            foreach ($object->getScheduledMessages() as $value) {
-                $values[] = $this->normalizer->normalize($value, 'json', $context);
-            }
-            $data['scheduled_messages'] = $values;
-        }
+        $data['scheduled_messages'] = $values;
         return $data;
     }
 }

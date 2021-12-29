@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class TeamIntegrationLogsGetResponse200Normalizer implements DenormalizerInterfa
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\TeamIntegrationLogsGetResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('logs', $data)) {
             $values = array();
             foreach ($data['logs'] as $value) {
@@ -51,19 +54,13 @@ class TeamIntegrationLogsGetResponse200Normalizer implements DenormalizerInterfa
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getLogs()) {
-            $values = array();
-            foreach ($object->getLogs() as $value) {
-                $values[] = $this->normalizer->normalize($value, 'json', $context);
-            }
-            $data['logs'] = $values;
+        $values = array();
+        foreach ($object->getLogs() as $value) {
+            $values[] = $this->normalizer->normalize($value, 'json', $context);
         }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
-        if (null !== $object->getPaging()) {
-            $data['paging'] = $this->normalizer->normalize($object->getPaging(), 'json', $context);
-        }
+        $data['logs'] = $values;
+        $data['ok'] = $object->getOk();
+        $data['paging'] = $this->normalizer->normalize($object->getPaging(), 'json', $context);
         return $data;
     }
 }

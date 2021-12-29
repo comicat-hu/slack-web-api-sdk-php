@@ -2,15 +2,15 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class UsergroupsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class UsergroupsCreate extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Create a User Group
      *
      * @param array $formParameters {
-     *     @var string $handle A mention handle. Must be unique among channels, users and User Groups.
-     *     @var string $description A short description of the User Group.
      *     @var string $channels A comma separated string of encoded channel IDs for which the User Group uses as a default.
+     *     @var string $description A short description of the User Group.
+     *     @var string $handle A mention handle. Must be unique among channels, users and User Groups.
      *     @var bool $include_count Include the number of users in each User Group.
      *     @var string $name A name for the User Group. Must be unique among User Groups.
      * }
@@ -23,7 +23,7 @@ class UsergroupsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -43,12 +43,12 @@ class UsergroupsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('handle', 'description', 'channels', 'include_count', 'name'));
+        $optionsResolver->setDefined(array('channels', 'description', 'handle', 'include_count', 'name'));
         $optionsResolver->setRequired(array('name'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('handle', array('string'));
-        $optionsResolver->setAllowedTypes('description', array('string'));
         $optionsResolver->setAllowedTypes('channels', array('string'));
+        $optionsResolver->setAllowedTypes('description', array('string'));
+        $optionsResolver->setAllowedTypes('handle', array('string'));
         $optionsResolver->setAllowedTypes('include_count', array('bool'));
         $optionsResolver->setAllowedTypes('name', array('string'));
         return $optionsResolver;
@@ -68,7 +68,7 @@ class UsergroupsCreate extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
      *
      * @return null|\Comicat\Slack\Api\Model\UsergroupsCreatePostResponse200|\Comicat\Slack\Api\Model\UsergroupsCreatePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\UsergroupsCreatePostResponse200', 'json');

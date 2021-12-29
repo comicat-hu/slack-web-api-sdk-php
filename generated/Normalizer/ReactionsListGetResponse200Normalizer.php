@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ReactionsListGetResponse200Normalizer implements DenormalizerInterface, No
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ReactionsListGetResponse200();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('items', $data)) {
             $values = array();
             foreach ($data['items'] as $value) {
@@ -47,28 +50,24 @@ class ReactionsListGetResponse200Normalizer implements DenormalizerInterface, No
             $object->setPaging($this->denormalizer->denormalize($data['paging'], 'Comicat\\Slack\\Api\\Model\\ObjsPaging', 'json', $context));
         }
         if (\array_key_exists('response_metadata', $data)) {
-            $object->setResponseMetadata($this->denormalizer->denormalize($data['response_metadata'], 'Comicat\\Slack\\Api\\Model\\ObjsResponseMetadata', 'json', $context));
+            $object->setResponseMetadata($data['response_metadata']);
         }
         return $object;
     }
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getItems()) {
-            $values = array();
-            foreach ($object->getItems() as $value) {
-                $values[] = $value;
-            }
-            $data['items'] = $values;
+        $values = array();
+        foreach ($object->getItems() as $value) {
+            $values[] = $value;
         }
-        if (null !== $object->getOk()) {
-            $data['ok'] = $object->getOk();
-        }
+        $data['items'] = $values;
+        $data['ok'] = $object->getOk();
         if (null !== $object->getPaging()) {
             $data['paging'] = $this->normalizer->normalize($object->getPaging(), 'json', $context);
         }
         if (null !== $object->getResponseMetadata()) {
-            $data['response_metadata'] = $this->normalizer->normalize($object->getResponseMetadata(), 'json', $context);
+            $data['response_metadata'] = $object->getResponseMetadata();
         }
         return $data;
     }

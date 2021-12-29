@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class UsersIdentityGetResponse200Item2UserNormalizer implements DenormalizerInte
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\UsersIdentityGetResponse200Item2User();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('id', $data)) {
             $object->setId($data['id']);
         }
@@ -62,30 +65,14 @@ class UsersIdentityGetResponse200Item2UserNormalizer implements DenormalizerInte
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getId()) {
-            $data['id'] = $object->getId();
-        }
-        if (null !== $object->getImage192()) {
-            $data['image_192'] = $object->getImage192();
-        }
-        if (null !== $object->getImage24()) {
-            $data['image_24'] = $object->getImage24();
-        }
-        if (null !== $object->getImage32()) {
-            $data['image_32'] = $object->getImage32();
-        }
-        if (null !== $object->getImage48()) {
-            $data['image_48'] = $object->getImage48();
-        }
-        if (null !== $object->getImage512()) {
-            $data['image_512'] = $object->getImage512();
-        }
-        if (null !== $object->getImage72()) {
-            $data['image_72'] = $object->getImage72();
-        }
-        if (null !== $object->getName()) {
-            $data['name'] = $object->getName();
-        }
+        $data['id'] = $object->getId();
+        $data['image_192'] = $object->getImage192();
+        $data['image_24'] = $object->getImage24();
+        $data['image_32'] = $object->getImage32();
+        $data['image_48'] = $object->getImage48();
+        $data['image_512'] = $object->getImage512();
+        $data['image_72'] = $object->getImage72();
+        $data['name'] = $object->getName();
         return $data;
     }
 }

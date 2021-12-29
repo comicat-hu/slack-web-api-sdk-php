@@ -2,16 +2,16 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class StarsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class StarsRemove extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Removes a star from an item.
      *
      * @param array $formParameters {
-     *     @var string $file_comment File comment to remove star from.
-     *     @var float $timestamp Timestamp of the message to remove star from.
      *     @var string $channel Channel to remove star from, or channel where the message to remove star from was posted (used with `timestamp`).
      *     @var string $file File to remove star from.
+     *     @var string $file_comment File comment to remove star from.
+     *     @var string $timestamp Timestamp of the message to remove star from.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `stars:write`
@@ -22,7 +22,7 @@ class StarsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \J
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -42,20 +42,20 @@ class StarsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \J
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('file_comment', 'timestamp', 'channel', 'file'));
+        $optionsResolver->setDefined(array('channel', 'file', 'file_comment', 'timestamp'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('file_comment', array('string'));
-        $optionsResolver->setAllowedTypes('timestamp', array('float'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
         $optionsResolver->setAllowedTypes('file', array('string'));
+        $optionsResolver->setAllowedTypes('file_comment', array('string'));
+        $optionsResolver->setAllowedTypes('timestamp', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getHeadersOptionsResolver();
         $optionsResolver->setDefined(array('token'));
-        $optionsResolver->setRequired(array());
+        $optionsResolver->setRequired(array('token'));
         $optionsResolver->setDefaults(array());
         $optionsResolver->setAllowedTypes('token', array('string'));
         return $optionsResolver;
@@ -66,7 +66,7 @@ class StarsRemove extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \J
      *
      * @return null|\Comicat\Slack\Api\Model\StarsRemovePostResponse200|\Comicat\Slack\Api\Model\StarsRemovePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\StarsRemovePostResponse200', 'json');

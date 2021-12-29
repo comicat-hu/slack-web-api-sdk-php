@@ -2,17 +2,17 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class AdminUsersAssign extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class AdminUsersAssign extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Add an Enterprise user to a workspace.
      *
      * @param array $formParameters {
-     *     @var string $user_id The ID of the user to add to the workspace.
-     *     @var string $channel_ids Comma separated values of channel IDs to add user in the new workspace.
      *     @var string $team_id The ID (`T1234`) of the workspace.
-     *     @var bool $is_ultra_restricted True if user should be added to the workspace as a single-channel guest.
+     *     @var string $user_id The ID of the user to add to the workspace.
      *     @var bool $is_restricted True if user should be added to the workspace as a guest.
+     *     @var bool $is_ultra_restricted True if user should be added to the workspace as a single-channel guest.
+     *     @var string $channel_ids Comma separated values of channel IDs to add user in the new workspace.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `admin.users:write`
@@ -23,7 +23,7 @@ class AdminUsersAssign extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -43,14 +43,14 @@ class AdminUsersAssign extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('user_id', 'channel_ids', 'team_id', 'is_ultra_restricted', 'is_restricted'));
-        $optionsResolver->setRequired(array('user_id', 'team_id'));
+        $optionsResolver->setDefined(array('team_id', 'user_id', 'is_restricted', 'is_ultra_restricted', 'channel_ids'));
+        $optionsResolver->setRequired(array('team_id', 'user_id'));
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('user_id', array('string'));
-        $optionsResolver->setAllowedTypes('channel_ids', array('string'));
         $optionsResolver->setAllowedTypes('team_id', array('string'));
-        $optionsResolver->setAllowedTypes('is_ultra_restricted', array('bool'));
+        $optionsResolver->setAllowedTypes('user_id', array('string'));
         $optionsResolver->setAllowedTypes('is_restricted', array('bool'));
+        $optionsResolver->setAllowedTypes('is_ultra_restricted', array('bool'));
+        $optionsResolver->setAllowedTypes('channel_ids', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -68,7 +68,7 @@ class AdminUsersAssign extends \Jane\OpenApiRuntime\Client\BaseEndpoint implemen
      *
      * @return null|\Comicat\Slack\Api\Model\AdminUsersAssignPostResponse200|\Comicat\Slack\Api\Model\AdminUsersAssignPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\AdminUsersAssignPostResponse200', 'json');

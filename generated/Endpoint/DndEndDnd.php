@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class DndEndDnd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class DndEndDnd extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Ends the current user's Do Not Disturb session immediately.
@@ -15,7 +15,7 @@ class DndEndDnd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jan
     {
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -47,7 +47,7 @@ class DndEndDnd extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jan
      *
      * @return null|\Comicat\Slack\Api\Model\DndEndDndPostResponse200|\Comicat\Slack\Api\Model\DndEndDndPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\DndEndDndPostResponse200', 'json');

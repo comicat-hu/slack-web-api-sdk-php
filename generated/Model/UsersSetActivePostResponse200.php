@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Model;
 
-class UsersSetActivePostResponse200 extends \ArrayObject
+class UsersSetActivePostResponse200
 {
     /**
      * 

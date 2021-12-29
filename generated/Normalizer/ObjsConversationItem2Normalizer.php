@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsConversationItem2Normalizer implements DenormalizerInterface, Normaliz
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsConversationItem2();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('created', $data)) {
             $object->setCreated($data['created']);
         }
@@ -108,15 +111,11 @@ class ObjsConversationItem2Normalizer implements DenormalizerInterface, Normaliz
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getCreated()) {
-            $data['created'] = $object->getCreated();
-        }
+        $data['created'] = $object->getCreated();
         if (null !== $object->getHasPins()) {
             $data['has_pins'] = $object->getHasPins();
         }
-        if (null !== $object->getId()) {
-            $data['id'] = $object->getId();
-        }
+        $data['id'] = $object->getId();
         if (null !== $object->getIsArchived()) {
             $data['is_archived'] = $object->getIsArchived();
         }
@@ -126,15 +125,11 @@ class ObjsConversationItem2Normalizer implements DenormalizerInterface, Normaliz
         if (null !== $object->getIsFrozen()) {
             $data['is_frozen'] = $object->getIsFrozen();
         }
-        if (null !== $object->getIsIm()) {
-            $data['is_im'] = $object->getIsIm();
-        }
+        $data['is_im'] = $object->getIsIm();
         if (null !== $object->getIsOpen()) {
             $data['is_open'] = $object->getIsOpen();
         }
-        if (null !== $object->getIsOrgShared()) {
-            $data['is_org_shared'] = $object->getIsOrgShared();
-        }
+        $data['is_org_shared'] = $object->getIsOrgShared();
         if (null !== $object->getIsShared()) {
             $data['is_shared'] = $object->getIsShared();
         }
@@ -156,9 +151,7 @@ class ObjsConversationItem2Normalizer implements DenormalizerInterface, Normaliz
         if (null !== $object->getPinCount()) {
             $data['pin_count'] = $object->getPinCount();
         }
-        if (null !== $object->getPriority()) {
-            $data['priority'] = $object->getPriority();
-        }
+        $data['priority'] = $object->getPriority();
         if (null !== $object->getShares()) {
             $values = array();
             foreach ($object->getShares() as $value) {
@@ -172,9 +165,7 @@ class ObjsConversationItem2Normalizer implements DenormalizerInterface, Normaliz
         if (null !== $object->getUnreadCountDisplay()) {
             $data['unread_count_display'] = $object->getUnreadCountDisplay();
         }
-        if (null !== $object->getUser()) {
-            $data['user'] = $object->getUser();
-        }
+        $data['user'] = $object->getUser();
         if (null !== $object->getVersion()) {
             $data['version'] = $object->getVersion();
         }

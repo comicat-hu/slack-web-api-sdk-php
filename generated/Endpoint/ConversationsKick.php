@@ -2,14 +2,14 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class ConversationsKick extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class ConversationsKick extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Removes a user from a conversation.
      *
      * @param array $formParameters {
-     *     @var string $user User ID to be removed.
      *     @var string $channel ID of conversation to remove user from.
+     *     @var string $user User ID to be removed.
      * }
      * @param array $headerParameters {
      *     @var string $token Authentication token. Requires scope: `conversations:write`
@@ -20,7 +20,7 @@ class ConversationsKick extends \Jane\OpenApiRuntime\Client\BaseEndpoint impleme
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -40,11 +40,11 @@ class ConversationsKick extends \Jane\OpenApiRuntime\Client\BaseEndpoint impleme
     protected function getFormOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getFormOptionsResolver();
-        $optionsResolver->setDefined(array('user', 'channel'));
+        $optionsResolver->setDefined(array('channel', 'user'));
         $optionsResolver->setRequired(array());
         $optionsResolver->setDefaults(array());
-        $optionsResolver->setAllowedTypes('user', array('string'));
         $optionsResolver->setAllowedTypes('channel', array('string'));
+        $optionsResolver->setAllowedTypes('user', array('string'));
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver() : \Symfony\Component\OptionsResolver\OptionsResolver
@@ -62,7 +62,7 @@ class ConversationsKick extends \Jane\OpenApiRuntime\Client\BaseEndpoint impleme
      *
      * @return null|\Comicat\Slack\Api\Model\ConversationsKickPostResponse200|\Comicat\Slack\Api\Model\ConversationsKickPostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\ConversationsKickPostResponse200', 'json');

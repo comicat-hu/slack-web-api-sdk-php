@@ -49,12 +49,6 @@ class ObjsConversationItem0
     /**
      * 
      *
-     * @var mixed
-     */
-    protected $externalConnections;
-    /**
-     * 
-     *
      * @var bool
      */
     protected $hasPins;
@@ -485,27 +479,6 @@ class ObjsConversationItem0
     public function setEnterpriseId(string $enterpriseId) : self
     {
         $this->enterpriseId = $enterpriseId;
-        return $this;
-    }
-    /**
-     * 
-     *
-     * @return mixed
-     */
-    public function getExternalConnections()
-    {
-        return $this->externalConnections;
-    }
-    /**
-     * 
-     *
-     * @param mixed $externalConnections
-     *
-     * @return self
-     */
-    public function setExternalConnections($externalConnections) : self
-    {
-        $this->externalConnections = $externalConnections;
         return $this;
     }
     /**

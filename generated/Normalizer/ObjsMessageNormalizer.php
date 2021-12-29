@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsMessageNormalizer implements DenormalizerInterface, NormalizerInterfac
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsMessage();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('attachments', $data)) {
             $values = array();
             foreach ($data['attachments'] as $value) {
@@ -299,21 +302,15 @@ class ObjsMessageNormalizer implements DenormalizerInterface, NormalizerInterfac
         if (null !== $object->getTeam()) {
             $data['team'] = $object->getTeam();
         }
-        if (null !== $object->getText()) {
-            $data['text'] = $object->getText();
-        }
+        $data['text'] = $object->getText();
         if (null !== $object->getThreadTs()) {
             $data['thread_ts'] = $object->getThreadTs();
         }
         if (null !== $object->getTopic()) {
             $data['topic'] = $object->getTopic();
         }
-        if (null !== $object->getTs()) {
-            $data['ts'] = $object->getTs();
-        }
-        if (null !== $object->getType()) {
-            $data['type'] = $object->getType();
-        }
+        $data['ts'] = $object->getTs();
+        $data['type'] = $object->getType();
         if (null !== $object->getUnreadCount()) {
             $data['unread_count'] = $object->getUnreadCount();
         }

@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ChatScheduleMessagePostResponse200MessageNormalizer implements Denormalize
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ChatScheduleMessagePostResponse200Message();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('bot_id', $data)) {
             $object->setBotId($data['bot_id']);
         }
@@ -59,24 +62,14 @@ class ChatScheduleMessagePostResponse200MessageNormalizer implements Denormalize
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getBotId()) {
-            $data['bot_id'] = $object->getBotId();
-        }
+        $data['bot_id'] = $object->getBotId();
         if (null !== $object->getBotProfile()) {
             $data['bot_profile'] = $this->normalizer->normalize($object->getBotProfile(), 'json', $context);
         }
-        if (null !== $object->getTeam()) {
-            $data['team'] = $object->getTeam();
-        }
-        if (null !== $object->getText()) {
-            $data['text'] = $object->getText();
-        }
-        if (null !== $object->getType()) {
-            $data['type'] = $object->getType();
-        }
-        if (null !== $object->getUser()) {
-            $data['user'] = $object->getUser();
-        }
+        $data['team'] = $object->getTeam();
+        $data['text'] = $object->getText();
+        $data['type'] = $object->getType();
+        $data['user'] = $object->getUser();
         if (null !== $object->getUsername()) {
             $data['username'] = $object->getUsername();
         }

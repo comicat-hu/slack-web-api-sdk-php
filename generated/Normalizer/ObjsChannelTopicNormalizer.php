@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsChannelTopicNormalizer implements DenormalizerInterface, NormalizerInt
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsChannelTopic();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('creator', $data)) {
             $object->setCreator($data['creator']);
         }
@@ -47,15 +50,9 @@ class ObjsChannelTopicNormalizer implements DenormalizerInterface, NormalizerInt
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getCreator()) {
-            $data['creator'] = $object->getCreator();
-        }
-        if (null !== $object->getLastSet()) {
-            $data['last_set'] = $object->getLastSet();
-        }
-        if (null !== $object->getValue()) {
-            $data['value'] = $object->getValue();
-        }
+        $data['creator'] = $object->getCreator();
+        $data['last_set'] = $object->getLastSet();
+        $data['value'] = $object->getValue();
         return $data;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Comicat\Slack\Api\Endpoint;
 
-class RemindersComplete extends \Jane\OpenApiRuntime\Client\BaseEndpoint implements \Jane\OpenApiRuntime\Client\Psr7Endpoint
+class RemindersComplete extends \Comicat\Slack\Api\Runtime\Client\BaseEndpoint implements \Comicat\Slack\Api\Runtime\Client\Endpoint
 {
     /**
      * Marks a reminder as complete.
@@ -19,7 +19,7 @@ class RemindersComplete extends \Jane\OpenApiRuntime\Client\BaseEndpoint impleme
         $this->formParameters = $formParameters;
         $this->headerParameters = $headerParameters;
     }
-    use \Jane\OpenApiRuntime\Client\Psr7EndpointTrait;
+    use \Comicat\Slack\Api\Runtime\Client\EndpointTrait;
     public function getMethod() : string
     {
         return 'POST';
@@ -60,7 +60,7 @@ class RemindersComplete extends \Jane\OpenApiRuntime\Client\BaseEndpoint impleme
      *
      * @return null|\Comicat\Slack\Api\Model\RemindersCompletePostResponse200|\Comicat\Slack\Api\Model\RemindersCompletePostResponsedefault
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType)
+    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         if (200 === $status) {
             return $serializer->deserialize($body, 'Comicat\\Slack\\Api\\Model\\RemindersCompletePostResponse200', 'json');

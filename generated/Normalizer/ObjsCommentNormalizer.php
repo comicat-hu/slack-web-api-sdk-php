@@ -3,7 +3,7 @@
 namespace Comicat\Slack\Api\Normalizer;
 
 use Jane\JsonSchemaRuntime\Reference;
-use Jane\JsonSchemaRuntime\Normalizer\CheckArray;
+use Comicat\Slack\Api\Runtime\Normalizer\CheckArray;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -33,6 +33,9 @@ class ObjsCommentNormalizer implements DenormalizerInterface, NormalizerInterfac
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         $object = new \Comicat\Slack\Api\Model\ObjsComment();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
         if (\array_key_exists('comment', $data)) {
             $object->setComment($data['comment']);
         }
@@ -79,18 +82,10 @@ class ObjsCommentNormalizer implements DenormalizerInterface, NormalizerInterfac
     public function normalize($object, $format = null, array $context = array())
     {
         $data = array();
-        if (null !== $object->getComment()) {
-            $data['comment'] = $object->getComment();
-        }
-        if (null !== $object->getCreated()) {
-            $data['created'] = $object->getCreated();
-        }
-        if (null !== $object->getId()) {
-            $data['id'] = $object->getId();
-        }
-        if (null !== $object->getIsIntro()) {
-            $data['is_intro'] = $object->getIsIntro();
-        }
+        $data['comment'] = $object->getComment();
+        $data['created'] = $object->getCreated();
+        $data['id'] = $object->getId();
+        $data['is_intro'] = $object->getIsIntro();
         if (null !== $object->getIsStarred()) {
             $data['is_starred'] = $object->getIsStarred();
         }
@@ -114,12 +109,8 @@ class ObjsCommentNormalizer implements DenormalizerInterface, NormalizerInterfac
             }
             $data['reactions'] = $values_1;
         }
-        if (null !== $object->getTimestamp()) {
-            $data['timestamp'] = $object->getTimestamp();
-        }
-        if (null !== $object->getUser()) {
-            $data['user'] = $object->getUser();
-        }
+        $data['timestamp'] = $object->getTimestamp();
+        $data['user'] = $object->getUser();
         return $data;
     }
 }
